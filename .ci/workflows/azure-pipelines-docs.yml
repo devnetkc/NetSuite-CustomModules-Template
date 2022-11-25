@@ -1,0 +1,38 @@
+# @format
+
+# Azure Pipelines -- Generate project documentation
+# @description: Generates documentation based on code in project, then commits changes to PR/branch. Uses variables to set git user for commits.
+# Git User:$(CI_GIT_USER)
+# Git Email:$(CI_GIT_EMAIL)
+# https://aka.ms/yaml
+
+variables:
+  - name: CI_GIT_USER
+    value: CHANGE ME NAME
+  - name: CI_GIT_EMAIL
+    value: change@this.com
+
+trigger:
+  branches:
+    include:
+      - main
+#    exclude:
+#      - production
+
+pr: none
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - checkout: self
+    clean: true
+    persistCredentials: true
+  - script: |
+      git config user.email "$(CI_GIT_EMAIL)" && git config user.name "$(CI_GIT_NAME)"
+      git checkout -b $(Build.SourceBranchName)
+      npm i
+      npm run docs
+      git add -A
+      git commit -m "📝 Updating Docs [ci skip]"
+      git push --set-upstream origin $(Build.SourceBranchName)
