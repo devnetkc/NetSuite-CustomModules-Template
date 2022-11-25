@@ -1,0 +1,52 @@
+{
+  "name": "netsuite-custommodules-template",
+  "version": "1.0.0",
+  "description": "NS Template project for testing and using CI/CD for your NetSuite SuiteCloud projects.",
+  "scripts": {
+    "test": "jest --coverage --$npm_config_watch ",
+    "test-ci": "jest --coverage --ci --testResultsProcessor=\"./node_modules/jest-junit-reporter\" --$npm_config_watch ",
+    "view-coverage": "npm run test && (start ./coverage/lcov-report/index.html || open ./coverage/lcov-report/index.html)",
+    "setup-server": "npm run install-SDF-cli && npm run generate-manifests --headbranch=$npm_config_headbranch --sourcebranch=$npm_config_sourcebranch && npm run save-token --account=$npm_config_account --authid=$npm_config_authid --tokenid=$npm_config_tokenid --tokensecret=$npm_config_tokensecret",
+    "install-SDF-cli": "npm i --acceptSuiteCloudSDKLicense @oracle/suitecloud-cli --verbose",
+    "suitecloud": "node ./node_modules/@oracle/suitecloud-cli/src/suitecloud.js",
+    "generate-manifests": "bash .ci/scripts/createDeployment.sh $npm_config_headbranch $npm_config_sourcebranch",
+    "deploy": "npm run add-ns-dependents && npm run suitecloud -- project:deploy",
+    "save-token": "node ./node_modules/@oracle/suitecloud-cli/src/suitecloud.js account:savetoken --account $npm_config_account --authid $npm_config_authid --tokenid $npm_config_tokenid --tokensecret $npm_config_tokensecret",
+    "deploy-pipeline": "npm run deploy",
+    "add-ns-dependents": "npm run suitecloud -- project:adddependencies",
+    "generate-jsDocs": "jsdoc -c .ci/config/jsDocsConf.json",
+    "generate-mdDocs": "jsdoc2md --template .ci/templates/README.hbs ./src/**/*[^.min].js > README.md",
+    "generate-wiki": "node .ci/config/docsMD.config.js",
+    "docs": "npm run generate-jsDocs && npm run generate-mdDocs && npm run generate-wiki",
+    "open-docs": "open ./docs/index.html || start ./docs/index.html "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devnetkc/NetSuite-CustomModules-Template.git"
+  },
+  "keywords": [
+    "NetSuite",
+    "Template",
+    "Module",
+    "Custom Module",
+    "Jest",
+    "Tests",
+    "Azure",
+    "CI/CD"
+  ],
+  "author": "Ryan Valizan <ryan@vnetkc.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/devnetkc/NetSuite-CustomModules-Template/issues"
+  },
+  "homepage": "https://github.com/devnetkc/NetSuite-CustomModules-Template#readme",
+  "devDependencies": {
+    "@oracle/suitecloud-unit-testing": "^1.2.1",
+    "@vnetwork-solutions/ns-custom-stubs-template": "^1.0.0",
+    "jest": "^29.3.1",
+    "jest-junit-reporter": "^1.1.0",
+    "jsdoc": "^3.6.11",
+    "jsdoc-to-markdown": "^7.1.1",
+    "suitecloud-unit-testing-stubs": "^1.0.4"
+  }
+}
