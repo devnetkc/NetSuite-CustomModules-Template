@@ -96,7 +96,7 @@ Entry method for CS pageInit function
 
 | Param | Type | Description |
 | --- | --- | --- |
-| scriptContext | <code>Object</code> | - Passed parameter for NetSuite CS pageInit entry function |
+| scriptContext | <code>Object</code> | Passed parameter for NetSuite CS pageInit entry function |
 | scriptContext.currentRecord | <code>Record</code> | Current form record |
 
 <a name="module_csExampleModule_CS--csExampleModule_CS.saveRecord"></a>
