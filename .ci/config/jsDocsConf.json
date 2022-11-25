@@ -2,7 +2,7 @@
   "source": {
     "includePattern": ".+\\.js(doc|x)?$",
     "include": ["."],
-    "exclude": ["node_modules"],
+    "exclude": ["node_modules", "__tests__", "jest.config.js"],
     "excludePattern": ".+\\.min\\.js$"
   },
   "recurseDepth": 10,
