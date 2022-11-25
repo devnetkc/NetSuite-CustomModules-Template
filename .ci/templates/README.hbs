@@ -1,4 +1,45 @@
 # Introduction
 
+This project is meant to serve as a baseline template project for getting tests implemented easier in to your NetSuite projects. Use these stubs for modules which are imported to other NetSuite SuiteCloud projects.
+
+Using the directory path `/SuiteScript/...`, we can provide aliases locally for these modules while still being available in NetSuite -- as the root directory for SuiteScript files in NetSuite is `/SuiteScripts/`.
+
+## 🎉 Getting Started
+
+1. Open [`./package.json](./package.json) and customize the project configuration
+2. Run `npm i` to install project dependencies
+3. Add your module path aliases to [`customJestStubs.js`](./customJestStubs.js)
+4. Create a local environment variable `NPM_TOKEN` using your NPM token for the value
+5. Publish your npm package using `npm publish`
+
+## 🧐 Notable Files
+
+- [README.hbs](./.ci/templates/README.hbs) -- Base template file the project README.md is generated from
+- [npmrc](./.npmrc) -- NPM environment token loader file for publishing project
+- [docsMD.config](./.ci/config/docsMD.config.js) -- Wiki MD generator from JSDoc notations
+- [jsDocsConf.json](./.ci/config/jsDocsConf.json) -- JSDocs configuration file
+
+## 🔨 Scripts
+
+Use `npm run <script>` to execute various commands for the project
+
+- `npm run test` -- Uses Jest to run tests (see [Running Tests](#-running-tests) for more details.)
+- `npm run docs` -- Generates project documentation based on JSDoc notations (Configure with [docsMD.config](./.ci/config/docsMD.config.js) && [jsDocsConf.json](./.ci/config/jsDocsConf.json))
+- `npm run open-docs` -- Opens documentation in browser for viewing
+
+### ✅ Running Tests
+
+- `npm run test` -- Uses Jest to run test files in `./__tests__` directory
+- `npm run test-ci` -- Uses Jest to run test files in `./__tests__` directory in CI mode creating junit report with it
+- `npm run test --watch=watch` -- Runs Jest tests in watch mode
+- `npm run view-coverage` -- Runs Jest tests and opens coverage report in browser window
+
+## 👷 CI/CD
+
+Azure yaml pipeline files are provided in [`.ci/workflows`](./.ci/workflows).
+
+- [`azure-pipelines-docs.yml`](./.ci/workflows/azure-pipelines-docs.yml) -- Generates documentation, commits,and pushes back to current PR/branch
+
 {{>main}}
 
+Happy Coding!
