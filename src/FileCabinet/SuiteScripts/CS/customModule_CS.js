@@ -49,7 +49,7 @@ function csExampleModule_CS(log, aModule, bModule) {
    * @name pageInit
    * @memberof module:csExampleModule_CS
    * @function
-   * @param  {Object} scriptContext -- Passed parameter for NetSuite CS pageInit entry function
+   * @param  {Object} scriptContext - Passed parameter for NetSuite CS pageInit entry function
    * @param {Record} scriptContext.currentRecord - Current form record
    * @description Entry method for CS pageInit function
    * @return {void}
