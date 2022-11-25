@@ -1,0 +1,14 @@
+{
+  "esversion": 11,
+  "forin": true,
+  "leanswitch": true,
+  "nocomma": true,
+  "nonbsp": true,
+  "nonew": true,
+  "noreturnawait": true,
+  "trailingcomma": false,
+  "debug": true,
+  "-W014": true,
+  "-W083": true,
+  "laxcomma": true
+}

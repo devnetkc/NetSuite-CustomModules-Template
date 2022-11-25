@@ -1,0 +1,2 @@
+# do not run Prettier against minified files
+**/*.min.*
