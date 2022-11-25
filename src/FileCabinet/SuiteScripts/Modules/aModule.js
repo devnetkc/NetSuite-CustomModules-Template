@@ -57,6 +57,7 @@ function aModule(query, log) {
    * @memberof module:aModule
    * @description Returns query result of vendor prefix from vendor record
    * @function
+   * @protected
    * @param {String} vendorId - Vendor entity ID to run query on
    * @return {String} - Returns vendor prefix string from query result
    */
