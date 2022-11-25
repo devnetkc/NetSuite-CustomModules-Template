@@ -2,11 +2,13 @@
 
 This project is meant to serve as a baseline template project for getting tests implemented easier in to your NetSuite projects. Use these stubs for modules which are imported to other NetSuite SuiteCloud projects.
 
+This is based currently based on **NS 2022.2**
+
 Using the directory path `/SuiteScript/...`, we can provide aliases locally for these modules while still being available in NetSuite -- as the root directory for SuiteScript files in NetSuite is `/SuiteScripts/`.
 
 ## 🎉 Getting Started
 
-1. Open [`./package.json](./package.json) and customize the project configuration
+1. Open [`./package.json`](./package.json) and customize the project configuration
 2. Run `npm i` to install project dependencies
 3. Add your module path aliases to [`customJestStubs.js`](./customJestStubs.js)
 4. Create a local environment variable `NPM_TOKEN` using your NPM token for the value
@@ -14,10 +16,11 @@ Using the directory path `/SuiteScript/...`, we can provide aliases locally for 
 
 ## 🧐 Notable Files
 
-- [README.hbs](./.ci/templates/README.hbs) -- Base template file the project README.md is generated from
-- [npmrc](./.npmrc) -- NPM environment token loader file for publishing project
-- [docsMD.config](./.ci/config/docsMD.config.js) -- Wiki MD generator from JSDoc notations
-- [jsDocsConf.json](./.ci/config/jsDocsConf.json) -- JSDocs configuration file
+- [`manifest.tpl.xml`](./ci/templates/manifest.tpl.xml) -- Used to create SuiteCloud project manifest (**Project Name Change Required**)
+- [`README.hbs`](./.ci/templates/README.hbs) -- Base template file the project README.md is generated from
+- [`npmrc`](./.npmrc) -- NPM environment token loader file for publishing project
+- [`docsMD.config`](./.ci/config/docsMD.config.js) -- Wiki MD generator from JSDoc notations
+- [`jsDocsConf.json`](./.ci/config/jsDocsConf.json) -- JSDocs configuration file
 
 ## 🔨 Scripts
 
