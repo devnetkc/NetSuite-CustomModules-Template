@@ -1,0 +1,23 @@
+{
+  "recommendations": [
+    "aaron-bond.better-comments",
+    "thekalinga.bootstrap4-vscode",
+    "streetsidesoftware.code-spell-checker",
+    "codemooseus.vscode-devtools-for-chrome",
+    "nickdodd79.gulptasks",
+    "yzhang.markdown-all-in-one",
+    "bierner.markdown-preview-github-styles",
+    "davidanson.vscode-markdownlint",
+    "esbenp.prettier-vscode",
+    "andrejunges.handlebars",
+    "oracle.suitecloud-vscode-extension",
+    "robole.markdown-snippets",
+    "stevencl.addDocComments",
+    "lici.require-js",
+    "Oracle.suitecloud-vscode-extension",
+    "foxundermoon.shell-format",
+    "adpyke.vscode-sql-formatter",
+    "Orta.vscode-jest",
+    "andys8.jest-snippets"
+  ]
+}
