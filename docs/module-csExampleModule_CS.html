@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: aModule</title>
+    <title>JSDoc: Module: csExampleModule_CS</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: aModule</h1>
+    <h1 class="page-title">Module: csExampleModule_CS</h1>
 
     
 
@@ -40,7 +40,7 @@
     <div class="container-overview">
     
         
-            <div class="description">Your custom NetSuite module A</div>
+            <div class="description">Your custom NetSuite Client Script module</div>
         
 
         
@@ -98,7 +98,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_FileCabinet_SuiteScripts_Modules_aModule.js.html">src/FileCabinet/SuiteScripts/Modules/aModule.js</a>, <a href="src_FileCabinet_SuiteScripts_Modules_aModule.js.html#line1">line 1</a>
+        <a href="src_FileCabinet_SuiteScripts_CS_customModule_CS.js.html">src/FileCabinet/SuiteScripts/CS/customModule_CS.js</a>, <a href="src_FileCabinet_SuiteScripts_CS_customModule_CS.js.html#line1">line 1</a>
     </li></ul></dd>
     
 
@@ -134,7 +134,7 @@
     
 
     
-    <h4 class="name" id="module:aModule"><span class="type-signature"></span>(require("aModule"))<span class="signature">(query, log)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="module:csExampleModule_CS"><span class="type-signature"></span>(require("csExampleModule_CS"))<span class="signature">(log, aModule, bModule)</span><span class="type-signature"></span></h4>
     
 
     
@@ -142,7 +142,7 @@
 
 
 <div class="description">
-    NetSuite module A export function
+    Custom NetSuite Client Script module export function
 </div>
 
 
@@ -178,29 +178,6 @@
 
         <tr>
             
-                <td class="name"><code>query</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">NS query module</td>
-        </tr>
-
-    
-
-        <tr>
-            
                 <td class="name"><code>log</code></td>
             
 
@@ -218,6 +195,52 @@
             
 
             <td class="description last">NS log module</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>aModule</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Custom NetSuite module A</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>bModule</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Custom NetSuite module B</td>
         </tr>
 
     
@@ -258,7 +281,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_FileCabinet_SuiteScripts_Modules_aModule.js.html">src/FileCabinet/SuiteScripts/Modules/aModule.js</a>, <a href="src_FileCabinet_SuiteScripts_Modules_aModule.js.html#line42">line 42</a>
+        <a href="src_FileCabinet_SuiteScripts_CS_customModule_CS.js.html">src/FileCabinet/SuiteScripts/CS/customModule_CS.js</a>, <a href="src_FileCabinet_SuiteScripts_CS_customModule_CS.js.html#line47">line 47</a>
     </li></ul></dd>
     
 
@@ -315,7 +338,7 @@
     
 
     
-    <h4 class="name" id=".GetVendorPrefix"><span class="type-signature">(static) </span>GetVendorPrefix<span class="signature">(vendorId)</span><span class="type-signature"> &rarr; {String}</span></h4>
+    <h4 class="name" id=".pageInit"><span class="type-signature">(static) </span>pageInit<span class="signature">(scriptContext)</span><span class="type-signature"> &rarr; {void}</span></h4>
     
 
     
@@ -323,7 +346,7 @@
 
 
 <div class="description">
-    Returns preferred vendor prefix from record or blank if no prefix is located
+    Entry method for CS pageInit function
 </div>
 
 
@@ -359,13 +382,13 @@
 
         <tr>
             
-                <td class="name"><code>vendorId</code></td>
+                <td class="name"><code>scriptContext</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type">Object</span>
 
 
             
@@ -375,7 +398,56 @@
 
             
 
-            <td class="description last">Entity ID of vendor Ex: `4321`</td>
+            <td class="description last">- Passed parameter for NetSuite CS pageInit entry function
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>currentRecord</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Record</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Current form record</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -416,7 +488,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_FileCabinet_SuiteScripts_Modules_aModule.js.html">src/FileCabinet/SuiteScripts/Modules/aModule.js</a>, <a href="src_FileCabinet_SuiteScripts_Modules_aModule.js.html#line43">line 43</a>
+        <a href="src_FileCabinet_SuiteScripts_CS_customModule_CS.js.html">src/FileCabinet/SuiteScripts/CS/customModule_CS.js</a>, <a href="src_FileCabinet_SuiteScripts_CS_customModule_CS.js.html#line48">line 48</a>
     </li></ul></dd>
     
 
@@ -452,7 +524,7 @@
     </dt>
     <dd>
         
-<span class="param-type">String</span>
+<span class="param-type">void</span>
 
 
     </dd>
@@ -470,7 +542,7 @@
     
 
     
-    <h4 class="name" id=".RunQuery"><span class="type-signature">(protected, static) </span>RunQuery<span class="signature">(vendorId)</span><span class="type-signature"> &rarr; {String}</span></h4>
+    <h4 class="name" id=".saveRecord"><span class="type-signature">(static) </span>saveRecord<span class="signature">(scriptContext)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
     
 
     
@@ -478,7 +550,7 @@
 
 
 <div class="description">
-    Returns query result of vendor prefix from vendor record
+    Entry method for CS saveRecord function
 </div>
 
 
@@ -514,13 +586,13 @@
 
         <tr>
             
-                <td class="name"><code>vendorId</code></td>
+                <td class="name"><code>scriptContext</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type">Object</span>
 
 
             
@@ -530,7 +602,7 @@
 
             
 
-            <td class="description last">Vendor entity ID to run query on</td>
+            <td class="description last">- Passed parameter for NetSuite CS saveRecord entry function</td>
         </tr>
 
     
@@ -571,7 +643,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_FileCabinet_SuiteScripts_Modules_aModule.js.html">src/FileCabinet/SuiteScripts/Modules/aModule.js</a>, <a href="src_FileCabinet_SuiteScripts_Modules_aModule.js.html#line55">line 55</a>
+        <a href="src_FileCabinet_SuiteScripts_CS_customModule_CS.js.html">src/FileCabinet/SuiteScripts/CS/customModule_CS.js</a>, <a href="src_FileCabinet_SuiteScripts_CS_customModule_CS.js.html#line70">line 70</a>
     </li></ul></dd>
     
 
@@ -600,7 +672,7 @@
 
         
 <div class="param-desc">
-    - Returns vendor prefix string from query result
+    - Returns `false` if record should not save yet
 </div>
 
 
@@ -611,7 +683,7 @@
     </dt>
     <dd>
         
-<span class="param-type">String</span>
+<span class="param-type">boolean</span>
 
 
     </dd>

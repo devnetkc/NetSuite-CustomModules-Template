@@ -2,22 +2,26 @@
 
 This project is meant to serve as a baseline template project for getting tests implemented easier in to your NetSuite projects. Use these stubs for modules which are imported to other NetSuite SuiteCloud projects.
 
+This is based currently based on **NS 2022.2**
+
+This project pairs with the [NetSuite-Cust-Jest-Stubs-Template](https://github.com/devnetkc/NetSuite-Cust-Jest-Stubs-Template) tutorial/template npm package project.
+
 Using the directory path `/SuiteScript/...`, we can provide aliases locally for these modules while still being available in NetSuite -- as the root directory for SuiteScript files in NetSuite is `/SuiteScripts/`.
 
 ## 🎉 Getting Started
 
-1. Open [`./package.json](./package.json) and customize the project configuration
-2. Run `npm i` to install project dependencies
-3. Add your module path aliases to [`customJestStubs.js`](./customJestStubs.js)
-4. Create a local environment variable `NPM_TOKEN` using your NPM token for the value
-5. Publish your npm package using `npm publish`
+1. Open [`./package.json`](./package.json) and customize the project configuration
+2. Add your `ExcludeStubs` path aliases to  [`jest.config.js`](./jest.config.js)
+3. Create a local environment variable `NPM_TOKEN` using your NPM token for the value
+4. Run `npm i` to install project dependencies
 
 ## 🧐 Notable Files
 
-- [README.hbs](./.ci/templates/README.hbs) -- Base template file the project README.md is generated from
-- [npmrc](./.npmrc) -- NPM environment token loader file for publishing project
-- [docsMD.config](./.ci/config/docsMD.config.js) -- Wiki MD generator from JSDoc notations
-- [jsDocsConf.json](./.ci/config/jsDocsConf.json) -- JSDocs configuration file
+- [`manifest.tpl.xml`](./ci/templates/manifest.tpl.xml) -- Used to create SuiteCloud project manifest (**Project Name Change Required**)
+- [`README.hbs`](./.ci/templates/README.hbs) -- Base template file the project README.md is generated from
+- [`npmrc`](./.npmrc) -- NPM environment token loader file for publishing project
+- [`docsMD.config`](./.ci/config/docsMD.config.js) -- Wiki MD generator from JSDoc notations
+- [`jsDocsConf.json`](./.ci/config/jsDocsConf.json) -- JSDocs configuration file
 
 ## 🔨 Scripts
 
@@ -43,19 +47,78 @@ Azure yaml pipeline files are provided in [`.ci/workflows`](./.ci/workflows).
 ## Modules
 
 <dl>
+<dt><a href="#module_csExampleModule_CS">csExampleModule_CS</a></dt>
+<dd><p>Your custom NetSuite Client Script module</p>
+</dd>
 <dt><a href="#module_aModule">aModule</a></dt>
 <dd><p>Your custom NetSuite module A</p>
 </dd>
-<dt><a href="#module_bModule">bModule</a></dt>
-<dd><p>Your custom NetSuite module B</p>
-</dd>
 </dl>
+
+<a name="module_csExampleModule_CS"></a>
+
+## csExampleModule\_CS
+Your custom NetSuite Client Script module
+
+**Summary**: This is example custom NetSuite Client Script module.  It may or may not be in your SuiteCloud project.
+Update your `jest.config.js` to map this module from the stub pkg to your local project if it is available.
+See project `jest.config.js` for further examples of this.  
+**Format**:   
+**Napiversion**: 2.1  
+**Since**: 2022.2  
+**Version**: 1.0.0  
+**License**: NApiVersion  
+
+* [csExampleModule_CS](#module_csExampleModule_CS)
+    * [csExampleModule_CS(log, aModule, bModule)](#exp_module_csExampleModule_CS--csExampleModule_CS) ⏏
+        * [.pageInit(scriptContext)](#module_csExampleModule_CS--csExampleModule_CS.pageInit) ⇒ <code>void</code>
+        * [.saveRecord(scriptContext)](#module_csExampleModule_CS--csExampleModule_CS.saveRecord) ⇒ <code>boolean</code>
+
+<a name="exp_module_csExampleModule_CS--csExampleModule_CS"></a>
+
+### csExampleModule\_CS(log, aModule, bModule) ⏏
+Custom NetSuite Client Script module export function
+
+**Kind**: Exported function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| log | <code>Object</code> | NS log module |
+| aModule | <code>Object</code> | Custom NetSuite module A |
+| bModule | <code>Object</code> | Custom NetSuite module B |
+
+<a name="module_csExampleModule_CS--csExampleModule_CS.pageInit"></a>
+
+#### csExampleModule_CS.pageInit(scriptContext) ⇒ <code>void</code>
+Entry method for CS pageInit function
+
+**Kind**: static method of [<code>csExampleModule\_CS</code>](#exp_module_csExampleModule_CS--csExampleModule_CS)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| scriptContext | <code>Object</code> | - Passed parameter for NetSuite CS pageInit entry function |
+| scriptContext.currentRecord | <code>Record</code> | Current form record |
+
+<a name="module_csExampleModule_CS--csExampleModule_CS.saveRecord"></a>
+
+#### csExampleModule_CS.saveRecord(scriptContext) ⇒ <code>boolean</code>
+Entry method for CS saveRecord function
+
+**Kind**: static method of [<code>csExampleModule\_CS</code>](#exp_module_csExampleModule_CS--csExampleModule_CS)  
+**Returns**: <code>boolean</code> - - Returns `false` if record should not save yet  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| scriptContext | <code>Object</code> | - Passed parameter for NetSuite CS saveRecord entry function |
 
 <a name="module_aModule"></a>
 
 ## aModule
 Your custom NetSuite module A
 
+**Summary**: This is example custom NetSuite module A.  It may or may not be in your SuiteCloud project.
+Update your `jest.config.js` to map this module from the stub pkg to your local project if it is available.
+See project `jest.config.js` for further examples of this.  
 **Format**:   
 **Napiversion**: 2.1  
 **Since**: 2022.2  
@@ -64,9 +127,8 @@ Your custom NetSuite module A
 
 * [aModule](#module_aModule)
     * [aModule(query, log)](#exp_module_aModule--aModule) ⏏
-        * [.GetVendorPrefix(itemName)](#module_aModule--aModule.GetVendorPrefix) ⇒ <code>String</code>
-        * [.EmployeeCount(department)](#module_aModule--aModule.EmployeeCount) ⇒ <code>Object</code>
-        * [.PrefixRegex(characters)](#module_aModule--aModule.PrefixRegex) ⇒ <code>Object</code>
+        * [.GetVendorPrefix(vendorId)](#module_aModule--aModule.GetVendorPrefix) ⇒ <code>String</code>
+        * [.RunQuery(vendorId)](#module_aModule--aModule.RunQuery) ⇒ <code>String</code>
 
 <a name="exp_module_aModule--aModule"></a>
 
@@ -82,73 +144,27 @@ NetSuite module A export function
 
 <a name="module_aModule--aModule.GetVendorPrefix"></a>
 
-#### aModule.GetVendorPrefix(itemName) ⇒ <code>String</code>
+#### aModule.GetVendorPrefix(vendorId) ⇒ <code>String</code>
 Returns preferred vendor prefix from record or blank if no prefix is located
 
 **Kind**: static method of [<code>aModule</code>](#exp_module_aModule--aModule)  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| itemName | <code>String</code> | Name of item Ex: `JD-4321` |
+| vendorId | <code>String</code> | Entity ID of vendor Ex: `4321` |
 
-<a name="module_aModule--aModule.EmployeeCount"></a>
+<a name="module_aModule--aModule.RunQuery"></a>
 
-#### aModule.EmployeeCount(department) ⇒ <code>Object</code>
-Returns number of employees in a given department
-
-**Kind**: static method of [<code>aModule</code>](#exp_module_aModule--aModule)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| department | <code>String</code> | Department to get number of employees from |
-
-<a name="module_aModule--aModule.PrefixRegex"></a>
-
-#### aModule.PrefixRegex(characters) ⇒ <code>Object</code>
-Returns regex object for finding a prefix in a string
+#### aModule.RunQuery(vendorId) ⇒ <code>String</code>
+Returns query result of vendor prefix from vendor record
 
 **Kind**: static method of [<code>aModule</code>](#exp_module_aModule--aModule)  
+**Returns**: <code>String</code> - - Returns vendor prefix string from query result  
+**Access**: protected  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| characters | <code>String</code> | Regex pattern to match before `-` for prefix |
-
-<a name="module_bModule"></a>
-
-## bModule
-Your custom NetSuite module B
-
-**Format**:   
-**Napiversion**: 2.1  
-**Since**: 2022.2  
-**Version**: 1.0.0  
-**License**: NApiVersion  
-
-* [bModule](#module_bModule)
-    * [bModule(log)](#exp_module_bModule--bModule) ⏏
-        * [.get_vendorPrefixB(recordObj)](#module_bModule--bModule.get_vendorPrefixB) ⇒ <code>String</code>
-
-<a name="exp_module_bModule--bModule"></a>
-
-### bModule(log) ⏏
-NetSuite module B export function
-
-**Kind**: Exported function  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| log | <code>Object</code> | NS log module |
-
-<a name="module_bModule--bModule.get_vendorPrefixB"></a>
-
-#### bModule.get\_vendorPrefixB(recordObj) ⇒ <code>String</code>
-Returns preferred vendor prefix from record or blank if no prefix is located
-
-**Kind**: static method of [<code>bModule</code>](#exp_module_bModule--bModule)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| recordObj | <code>Record</code> | NS Record Object to update |
+| vendorId | <code>String</code> | Vendor entity ID to run query on |
 
 
 Happy Coding!
