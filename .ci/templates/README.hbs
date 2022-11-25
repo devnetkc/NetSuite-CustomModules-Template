@@ -14,6 +14,7 @@ Using the directory path `/SuiteScript/...`, we can provide aliases locally for 
 2. Add your `ExcludeStubs` path aliases to  [`jest.config.js`](./jest.config.js)
 3. Create a local environment variable `NPM_TOKEN` using your NPM token for the value
 4. Run `npm i` to install project dependencies
+5. Run `npm run generate-manifests` to create local deploy.xml and manifest files
 
 ## 🧐 Notable Files
 
@@ -30,6 +31,8 @@ Use `npm run <script>` to execute various commands for the project
 - `npm run test` -- Uses Jest to run tests (see [Running Tests](#-running-tests) for more details.)
 - `npm run docs` -- Generates project documentation based on JSDoc notations (Configure with [docsMD.config](./.ci/config/docsMD.config.js) && [jsDocsConf.json](./.ci/config/jsDocsConf.json))
 - `npm run open-docs` -- Opens documentation in browser for viewing
+- `npm run generate-manifests` -- Generates empty `deploy.xml` && `manifest.xml` in local project
+- `npm run generate-manifests --headbranch=main --sourcebranch=dev` -- Generates change based `deploy.xml` && `manifest.xml` in local project based on source and head branch differences
 
 ### ✅ Running Tests
 
