@@ -6,6 +6,9 @@
  * @NApiVersion 2.1
  * @preserve NApiVersion
  * @since 2022.2
+ * @summary This is example custom NetSuite module A.  It may or may not be in your SuiteCloud project.
+ * Update your `jest.config.js` to map this module from the stub pkg to your local project if it is available.
+ * See project `jest.config.js` for further examples of this.
  */
 (() => {
   /**
@@ -42,43 +45,37 @@ function aModule(query, log) {
    * @description Returns preferred vendor prefix from record or blank if no prefix is located
    * @function
    * @memberof module:aModule
-   * @param {String} itemName - Name of item Ex: `JD-4321`
+   * @param {String} vendorId - Entity ID of vendor Ex: `4321`
    * @return {String}
-   */
-  const GetVendorPrefix = itemName => {
+   */ const GetVendorPrefix = vendorId => {
+    const VendorPrefix = RunQuery(vendorId);
     // Example response
-    return itemName.search(PrefixRegex(`..`));
+    return VendorPrefix;
   };
   /**
-   * @name EmployeeCount
+   * @name RunQuery
    * @memberof module:aModule
-   * @description Returns number of employees in a given department
+   * @description Returns query result of vendor prefix from vendor record
    * @function
-   * @param {String} department - Department to get number of employees from
-   * @return {Object}
+   * @param {String} vendorId - Vendor entity ID to run query on
+   * @return {String} - Returns vendor prefix string from query result
    */
-  const EmployeeCount = department => {};
-  /**
-   * @name PrefixRegex
-   * @memberof module:aModule
-   * @description Returns regex object for finding a prefix in a string
-   * @function
-   * @param {String} characters - Regex pattern to match before `-` for prefix
-   * @return {Object}
-   */
-  const PrefixRegex = characters => {
-    return new RegExp(`^(${characters})-`);
+  const RunQuery = vendorId => {
+    // Sample use of NS query module
+    const QueryResult = query.runSuiteQL({
+      query: `SELECT vendor.prefix FROM vendor WHERE vendor.entityid = ${vendorId}`,
+    });
+    return QueryResult.prefix;
   };
   // * This is for Jest to have direct access to all methods for running tests
   if (typeof module !== 'undefined' && typeof require !== 'undefined') {
     return {
       GetVendorPrefix,
-      PrefixRegex,
-      EmployeeCount,
+      RunQuery,
     };
   }
   // * These methods are returned in NetSuite
   return {
-    EmployeeCount,
+    GetVendorPrefix,
   };
 }
