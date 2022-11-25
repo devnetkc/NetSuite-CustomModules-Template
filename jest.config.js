@@ -14,7 +14,11 @@ const MyCustomStubs = CustomJestStubs.customStubs;
 // Here, you can control the paths for stubbed modules to their local file for Jest tests.
 const ExcludeStubs = [
   {
-    name: '/SuiteScripts/Modules/rQuery',
+    name: '/SuiteScripts/Modules/aModule',
+    path: `${__dirname}/src/FileCabinet`,
+  },
+  {
+    name: '/SuiteScripts/Modules/aModule.min',
     path: `${__dirname}/src/FileCabinet`,
   },
 ];
