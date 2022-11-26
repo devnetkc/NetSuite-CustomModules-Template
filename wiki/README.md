@@ -1,8 +1,13 @@
-# Introduction
+# 🚀 Introduction
 
-This project is meant to serve as a baseline template project for getting tests implemented easier in to your NetSuite projects. Use these stubs for modules which are imported to other NetSuite SuiteCloud projects.
+This project is meant to serve as a baseline template project for getting tests implemented easier in to your NetSuite SuiteCloud projects. This project demonstrates how to create and use:
 
-This is based currently based on **NS 2022.2**
+-   Custom NetSuite modules
+-   Test modules using Jest
+-   Import your custom stubs package for Jest test
+-   Integrate continuos integration/deployment pipelines for your project
+
+This is currently based on **NS 2022.2**
 
 This project pairs with the [NetSuite-Cust-Jest-Stubs-Template](https://github.com/devnetkc/NetSuite-Cust-Jest-Stubs-Template) tutorial/template npm package project.
 
@@ -10,42 +15,57 @@ Using the directory path `/SuiteScript/...`, we can provide aliases locally for 
 
 ## 🎉 Getting Started
 
-1. Open [`./package.json`](./package.json) and customize the project configuration
-2. Add your `ExcludeStubs` path aliases to  [`jest.config.js`](./jest.config.js)
-3. Create a local environment variable `NPM_TOKEN` using your NPM token for the value
-4. Run `npm i` to install project dependencies
-5. Run `npm run generate-manifests` to create local deploy.xml and manifest files
+1.  Open [`./package.json`](./package.json) and customize the project configuration
+2.  Add your own `ExcludeStubs` path aliases to  [`jest.config.js`](./jest.config.js)
+3.  Create a local environment variable `NPM_TOKEN` using your NPM token for the value _(Note: this variable name can be changed within the [`.npmrc`](./.npmrc) file)_
+4.  Run `npm i` to install the project dependencies
+5.  Run `npm run generate-manifests` to create local deploy.xml and manifest files **Required files to use SuiteCloud tools**
+6.  Setup SuiteCloud account details
+    -   CLI _(Note: update `$()` variables with your own values)_
+        ```JS
+        npm run setup-server --sourcebranch=$(SOURCEBRANCH) --headbranch=$(HEADBRANCH) --account=$(ACCOUNT) --authid=$(AUTHID) --tokenid=$(TOKENID) --tokensecret=$(TOKENSECRET)
+        ```
+    -   VSCode
+        -   Open command pallet
+            -   MacOS:`CMD + SHIFT + p` 
+            -   Win: `CTRL + SHIFT + p`
+        -   Select & Run `SuiteCloud: Set Up Account`
 
 ## 🧐 Notable Files
 
-- [`manifest.tpl.xml`](./ci/templates/manifest.tpl.xml) -- Used to create SuiteCloud project manifest (**Project Name Change Required**)
-- [`README.hbs`](./.ci/templates/README.hbs) -- Base template file the project README.md is generated from
-- [`npmrc`](./.npmrc) -- NPM environment token loader file for publishing project
-- [`docsMD.config`](./.ci/config/docsMD.config.js) -- Wiki MD generator from JSDoc notations
-- [`jsDocsConf.json`](./.ci/config/jsDocsConf.json) -- JSDocs configuration file
+-   [`manifest.tpl.xml`](./ci/templates/manifest.tpl.xml) -- Used to create SuiteCloud project manifest (**Project Name Change Required**)
+-   [`README.hbs`](./.ci/templates/README.hbs) -- Base template file the project README.md is generated from
+-   [`npmrc`](./.npmrc) -- NPM environment token loader file for publishing project _(Note: the variable name `NPM_TOKEN` can be changed for multiple tokens)_
+-   [`docsMD.config`](./.ci/config/docsMD.config.js) -- Wiki MD generator from JSDoc notations
+-   [`jsDocsConf.json`](./.ci/config/jsDocsConf.json) -- JSDocs configuration file
 
 ## 🔨 Scripts
 
 Use `npm run <script>` to execute various commands for the project
 
-- `npm run test` -- Uses Jest to run tests (see [Running Tests](#-running-tests) for more details.)
-- `npm run docs` -- Generates project documentation based on JSDoc notations (Configure with [docsMD.config](./.ci/config/docsMD.config.js) && [jsDocsConf.json](./.ci/config/jsDocsConf.json))
-- `npm run open-docs` -- Opens documentation in browser for viewing
-- `npm run generate-manifests` -- Generates empty `deploy.xml` && `manifest.xml` in local project
-- `npm run generate-manifests --headbranch=main --sourcebranch=dev` -- Generates change based `deploy.xml` && `manifest.xml` in local project based on source and head branch differences
+-   `npm run test` -- Uses Jest to run tests (see [Running Tests](#-running-tests) for more details.)
+-   `npm run docs` -- Generates project documentation based on JSDoc notations (Configure with [docsMD.config](./.ci/config/docsMD.config.js) && [jsDocsConf.json](./.ci/config/jsDocsConf.json)) *(Note: also updates contributor list)*
+-   `npm run open-docs` -- Opens documentation in browser for viewing
+-   `npm run generate-manifests` -- Generates empty `deploy.xml` && `manifest.xml` in local project to satisfy SDF as being a SuiteCloud project
+-   `npm run generate-manifests --headbranch=main --sourcebranch=dev` -- Generates change based `deploy.xml` && `manifest.xml` in local project based on source and head branch differences _(Note: script files referenced in changed Object files will be included in deploy.xml files if they exist, even if there was no changes made to them)_
 
 ### ✅ Running Tests
 
-- `npm run test` -- Uses Jest to run test files in `./__tests__` directory
-- `npm run test-ci` -- Uses Jest to run test files in `./__tests__` directory in CI mode creating junit report with it
-- `npm run test --watch=watch` -- Runs Jest tests in watch mode
-- `npm run view-coverage` -- Runs Jest tests and opens coverage report in browser window
+-   `npm run test` -- Uses Jest to run test files in `./__tests__` directory
+-   `npm run test-ci` -- Uses Jest to run test files in `./__tests__` directory in CI mode creating junit report with it
+-   `npm run test --watch=watch` -- Runs Jest tests in watch mode
+-   `npm run view-coverage` -- Runs Jest tests and opens coverage report in browser window
 
 ## 👷 CI/CD
 
 Azure yaml pipeline files are provided in [`.ci/workflows`](./.ci/workflows).
 
-- [`azure-pipelines-docs.yml`](./.ci/workflows/azure-pipelines-docs.yml) -- Generates documentation, commits,and pushes back to current PR/branch
+-   [`azure-pipelines-docs.yml`](./.ci/workflows/azure-pipelines-docs.yml) -- Generates documentation, commits,and pushes back to current PR/branch
+-   [`azure-pipelines-build-deploy.yml`](./.ci/workflows/azure-pipelines-build-deploy.yml) -- Runs Jest tests, generates a change based deploy.xml, updates manifest dependencies, and uses SuiteCloud CLI to deploy projects
+
+## 📝 Documentation
+
+
 
 ## Modules
 
@@ -170,4 +190,4 @@ Returns query result of vendor prefix from vendor record
 | vendorId | <code>String</code> | Vendor entity ID to run query on |
 
 
-Happy Coding!
+Happy Coding! 🥳 
