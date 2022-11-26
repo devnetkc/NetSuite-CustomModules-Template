@@ -63,9 +63,13 @@ Azure yaml pipeline files are provided in [`.ci/workflows`](./.ci/workflows).
 -   [`azure-pipelines-docs.yml`](./.ci/workflows/azure-pipelines-docs.yml) -- Generates documentation, commits,and pushes back to current PR/branch
 -   [`azure-pipelines-build-deploy.yml`](./.ci/workflows/azure-pipelines-build-deploy.yml) -- Runs Jest tests, generates a change based deploy.xml, updates manifest dependencies, and uses SuiteCloud CLI to deploy projects
 
+## 👥 Contributors
+
+| Name             | GitHub                                  | Twitter                                   |
+| ---------------- | --------------------------------------- | ----------------------------------------- |
+| **Ryan Valizan** | [devnetkc](https://github.com/devnetkc) | [@devnetkc](https://twitter.com/devnetkc) |
+
 ## 📝 Documentation
-
-
 
 ## Modules
 
