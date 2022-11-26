@@ -1,15 +1,16 @@
 #!/bin/bash
-
+echo $(pwd)
+SCRIPT_DIR=$(pwd)
 # Assign the filename
-README_TPL=".ci/templates/README.hbs"
-README_TPL_TEMP=".ci/templates/README.temp.hbs"
+README_TPL="$SCRIPT_DIR/.ci/templates/README.hbs"
+README_TPL_TEMP="$SCRIPT_DIR/.ci/templates/README.temp.hbs"
 # Create temporary files
-CONTRIBUTORS_FILE=".ci/templates/contributors.temp.md"
+CONTRIBUTORS_FILE="$SCRIPT_DIR/.ci/templates/contributors.temp.md"
 cp $README_TPL $README_TPL_TEMP
 touch $CONTRIBUTORS_FILE
 
 # Run contributor update to contributor temp file
-npx contributor-table --dirname "./" --readme $CONTRIBUTORS_FILE
+npx contributor-table --dirname "$SCRIPT_DIR" --readme $CONTRIBUTORS_FILE
 
 # Add our emoji back to header
 sed -i "" s/"## Contributors"/"## 👥 Contributors"/ $CONTRIBUTORS_FILE
@@ -18,6 +19,8 @@ sed -i "" s/"## Contributors"/"## 👥 Contributors"/ $CONTRIBUTORS_FILE
 README_OUTPUT=$(<$README_TPL)
 CONTRIBUTOR_OUTPUT=$(<$CONTRIBUTORS_FILE)
 # Merge files replacing pointer in TPL file
+echo $README_OUTPUT
+echo $CONTRIBUTOR_OUTPUT
 echo "${README_OUTPUT//"{{Contributors}}"/$CONTRIBUTOR_OUTPUT}" >$README_TPL_TEMP
 
 # Clean up contributor temp file
