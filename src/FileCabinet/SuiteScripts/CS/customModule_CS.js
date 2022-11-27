@@ -25,6 +25,7 @@
   ];
   //AMD & CommonJS compatibility stuff
   // CommonJS
+  /* istanbul ignore next */
   if (typeof module !== 'undefined' && typeof require !== 'undefined') {
     // Set ID for identifying in Jest
     module.id = '/SuiteScripts/CS/csExampleModule_CS';
@@ -32,7 +33,9 @@
     module.exports.mockable = csExampleModule_CS; // module loader with mockable dependencies
   }
   // AMD
+  /* istanbul ignore next */
   if (typeof define !== 'undefined') {
+    /* istanbul ignore next */
     define(Dependencies, csExampleModule_CS);
   }
 })();
