@@ -13,7 +13,14 @@
     ".prettierrc.json": true,
     "project.json": true */
   },
-  "cSpell.words": ["entityid", "itemid", "quickview", "Sublist", "vendorid"],
+  "cSpell.words": [
+    "custbody",
+    "entityid",
+    "itemid",
+    "quickview",
+    "Sublist",
+    "vendorid"
+  ],
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "editor.formatOnPaste": false,
