@@ -1,0 +1,38 @@
+# @format
+
+name: Update Documentation
+on:
+  push:
+    branches:
+      - main
+
+env:
+  FORCE_COLOR: 2
+
+jobs:
+  run:
+    name: Generate Documentation README
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Update documentation
+        run: npm run docs
+
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v9
+        with:
+          author_name: GitHub Actions
+          author_email: actions@github.com
+          message: '📝 Generated Documentation'
+          add: '.'
