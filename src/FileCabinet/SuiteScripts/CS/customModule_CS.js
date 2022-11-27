@@ -84,7 +84,7 @@ function csExampleModule_CS(log, aModule, bModule) {
     try {
       log.audit('starting custom client script saveRecord');
       // Run code to see if...
-      // allowSave = false;
+      if (!scriptContext.currentRecord) allowSave = false; //?
     } catch (err) {
       log.error({ title: 'csExampleModule_CS.saveRecord()', details: err });
     }
