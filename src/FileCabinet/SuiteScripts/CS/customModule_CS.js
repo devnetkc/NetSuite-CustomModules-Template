@@ -61,7 +61,11 @@ function csExampleModule_CS(log, aModule, bModule) {
       log.debug({ title: `Vendor Prefix Set`, details: { VendorPrefix } });
       if (!scriptContext.hasOwnProperty('currentRecord'))
         throw 'MISSING_RECORD_PROPERTY';
-      bModule.set_CustomFieldValue(scriptContext.currentRecord, VendorPrefix);
+      bModule.set_CustomFieldValue({
+        currentRecord: scriptContext.currentRecord,
+        fieldId: 'custbody_example-id-1',
+        value: VendorPrefix,
+      });
       log.audit(`Vendor prefix saved`);
     } catch (err) {
       log.error({ title: 'csExampleModule_CS.pageInit()', details: err });
