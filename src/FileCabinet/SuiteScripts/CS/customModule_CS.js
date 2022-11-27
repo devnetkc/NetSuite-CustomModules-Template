@@ -76,6 +76,7 @@ function csExampleModule_CS(log, aModule, bModule) {
    * @memberof module:csExampleModule_CS
    * @function
    * @param  {Object} scriptContext -- Passed parameter for NetSuite CS saveRecord entry function
+   * @param  {Object} scriptContext.currentRecord -- Current record being saved
    * @description Entry method for CS saveRecord function
    * @return {boolean} - Returns `false` if record should not save yet
    */
