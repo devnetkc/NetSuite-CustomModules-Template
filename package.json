@@ -1,6 +1,6 @@
 {
   "name": "netsuite-custommodules-template",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "NS Template project for testing and using CI/CD for your NetSuite SuiteCloud projects.",
   "scripts": {
     "test": "jest --coverage --$npm_config_watch ",
@@ -42,7 +42,7 @@
   "homepage": "https://github.com/devnetkc/NetSuite-CustomModules-Template#readme",
   "devDependencies": {
     "@oracle/suitecloud-unit-testing": "^1.2.1",
-    "@vnetwork-solutions/ns-custom-stubs-template": "^1.2.0",
+    "@vnetwork-solutions/ns-custom-stubs-template": "^2.0.1",
     "contributor-table": "^1.0.0",
     "jest": "^29.3.1",
     "jest-junit-reporter": "^1.1.0",

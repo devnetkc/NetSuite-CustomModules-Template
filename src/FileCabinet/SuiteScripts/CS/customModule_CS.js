@@ -25,7 +25,7 @@
   ];
   //AMD & CommonJS compatibility stuff
   // CommonJS
-  /* istanbul ignore next */
+  /* istanbul ignore else */
   if (typeof module !== 'undefined' && typeof require !== 'undefined') {
     // Set ID for identifying in Jest
     module.id = '/SuiteScripts/CS/csExampleModule_CS';

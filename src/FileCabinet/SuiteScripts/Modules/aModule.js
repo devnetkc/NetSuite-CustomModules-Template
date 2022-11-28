@@ -21,14 +21,15 @@
   const Dependencies = ['N/query', 'N/log'];
   //AMD & CommonJS compatibility stuff
   // CommonJS
-  /* istanbul ignore next */
+  /* istanbul ignore else */
   if (typeof module !== 'undefined' && typeof require !== 'undefined') {
     // Set ID for identifying in Jest
     module.id = '/SuiteScripts/Modules/aModule';
     module.exports = aModule.apply(this, Dependencies.map(require));
     module.exports.mockable = aModule; // module loader with mockable dependencies
   }
-  // AMD /* istanbul ignore next */
+  // AMD
+  /* istanbul ignore next */
   if (typeof define !== 'undefined') {
     /* istanbul ignore next */
     define(Dependencies, aModule);
@@ -71,7 +72,7 @@ function aModule(query, log) {
     return QueryResult.prefix;
   };
   // * This is for Jest to have direct access to all methods for running tests
-  /* istanbul ignore next */
+  /* istanbul ignore else */
   if (typeof module !== 'undefined' && typeof require !== 'undefined') {
     return {
       GetVendorPrefix,
