@@ -24,6 +24,8 @@ jobs:
           node-version: 16
       - name: Clean install npm dependencies
         run: npm ci
+      - name: Run tests
+        run: npm test
       - name: Update documentation
         run: npm run docs
       - name: Commit changes
