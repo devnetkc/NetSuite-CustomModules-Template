@@ -92,4 +92,42 @@ describe('customModule_CS.js', () => {
       expect(aModuleSpy).toHaveBeenCalledTimes(1);
     });
   });
+  describe('test saveRecord', () => {
+    const Record = new record.Record();
+    describe('test errors', () => {
+      const ErrorSpy = jest.spyOn(log, 'error');
+      test('Should not throw any errors', () => {
+        const ExecSaveRecord = customModule_CS.saveRecord({
+          currentRecord: Record,
+        });
+        expect(
+          jest.fn(() => {
+            ExecSaveRecord;
+          })
+        ).not.toThrow(Error);
+        expect(ExecSaveRecord).toBeTruthy();
+        expect(ErrorSpy).toHaveBeenCalledTimes(0);
+      });
+      test('Should catch errors', () => {
+        const ExecSaveRecord = customModule_CS.saveRecord();
+        expect(
+          jest.fn(() => {
+            ExecSaveRecord;
+          })
+        ).not.toThrow(Error);
+        expect(ExecSaveRecord).toBeTruthy();
+        expect(ErrorSpy).toHaveBeenCalledTimes(1);
+      });
+      test("Doesn't allow save if no currentRecord property found", () => {
+        const ExecSaveRecord = customModule_CS.saveRecord({});
+        expect(
+          jest.fn(() => {
+            ExecSaveRecord;
+          })
+        ).not.toThrow(Error);
+        expect(ExecSaveRecord).toBeFalsy();
+        expect(ErrorSpy).toHaveBeenCalledTimes(0);
+      });
+    });
+  });
 });
