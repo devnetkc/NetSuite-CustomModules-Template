@@ -1,0 +1,5 @@
+# @format
+
+steps:
+  - script: TRIMMED_NAME=$(echo "$(System.PullRequest.SourceBranch)" | sed "s:refs/heads/::") && echo "##vso[task.setvariable variable=SourceBranch;]$TRIMMED_NAME"
+    condition: ne(variables['System.PullRequest.SourceBranch'], '')
