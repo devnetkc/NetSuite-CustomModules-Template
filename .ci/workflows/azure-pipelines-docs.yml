@@ -19,8 +19,6 @@ trigger:
 #    exclude:
 #      - production
 
-pr: none
-
 pool:
   vmImage: ubuntu-latest
 

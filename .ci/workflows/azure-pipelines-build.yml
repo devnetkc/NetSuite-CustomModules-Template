@@ -1,0 +1,61 @@
+# @format
+
+steps:
+  - template: azure-pipelines-select-branch.yml
+  - task: JavaToolInstaller@0
+    inputs:
+      versionSpec: '17'
+      jdkArchitectureOption: 'x64'
+      jdkSourceOption: 'PreInstalled'
+  - checkout: self
+    clean: true
+    persistCredentials: true
+  - script: |
+      # Fetch origin branches
+      git fetch --all --prune 
+
+      ## leave detached head mode
+      git checkout $(SourcedBranch)
+
+      # Install NetSuite SDF
+      npm i 
+      npm run setup-server --sourcebranch=$(SourcedBranch) --headbranch=$(HEADBRANCH) --account=$(ACCOUNT) --authid=$(AUTHID) --tokenid=$ENV_TOKENID --tokensecret=$ENV_TOKENSECRET
+
+      ## Uncomment if not using Azure DevOps Releases to deploy changes to NetSuite
+      # npm run deploy-pipeline --verbose
+
+      ## Run Jest tests
+      npm run test
+    env:
+      # NPM Token variable if using private NPM repository for packages
+      # NPM_TOKEN: $(NPM_TOKEN) #uncomment to use
+      # NetSuite Secret Token within Azure Library/Variables
+      ENV_TOKENSECRET: $(TOKENSECRET)
+      # NetSuite Secret Token ID within Azure Library/Variables
+      ENV_TOKENID:
+        $(TOKENID)
+
+        # Publish test results to Azure
+#          - task: PublishTestResults@2
+#            inputs:
+#              testResultsFormat: 'JUnit'
+#              testResultsFiles: '**/test-report*.xml'
+#              failTaskOnFailedTests: true
+#              testRunTitle: 'NetSuite Module Deployment Tests'
+
+## Publish artifact to Azure for use in Release pipeline
+# Alternative would be to deploy in RunNPMScripts step
+#          - task: CopyFiles@2
+#            inputs:
+#              contents: |
+#               **
+#                !**/node_modules/**
+#                !**/.vscode/**
+#                !**/docs/**
+#                !**/resources/**
+#                !**/__tests__/**
+#              targetFolder: $(Build.ArtifactStagingDirectory)
+#          - task: PublishBuildArtifacts@1
+#            inputs:
+#              pathToPublish: $(Build.ArtifactStagingDirectory)
+#              artifactName: Build-$(buildLabel)
