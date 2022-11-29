@@ -56,6 +56,15 @@ Use `npm run <script>` to execute various commands for the project
 -   `npm run test --watch=watch` -- Runs Jest tests in watch mode
 -   `npm run view-coverage` -- Runs Jest tests and opens coverage report in browser window
 
+#### Wallaby.js
+
+[![Wallaby.js](https://img.shields.io/badge/wallaby.js-powered-blue.svg?style=flat&logo=github)](https://wallabyjs.com/oss/)
+
+This repository contributors are welcome to use
+[Wallaby.js OSS License](https://wallabyjs.com/oss/) to get
+test results immediately as you type, and see the results in
+your editor right next to your code.
+
 ## 👷 CI/CD
 
 Azure yaml pipeline files are provided in [`.ci/workflows`](./.ci/workflows).
