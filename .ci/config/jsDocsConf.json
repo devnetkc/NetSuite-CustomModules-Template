@@ -2,12 +2,41 @@
   "source": {
     "includePattern": ".+\\.js(doc|x)?$",
     "include": ["."],
-    "exclude": ["node_modules", "__tests__", "jest.config.js"],
+    "exclude": ["node_modules", "docs"],
     "excludePattern": ".+\\.min\\.js$"
   },
   "recurseDepth": 10,
   "opts": {
-    "destination": "./docs/",
-    "recurse": true
+    "readme": "./README.md",
+    "destination": "./docs/private/",
+    "recurse": true,
+    "template": "node_modules/clean-jsdoc-theme",
+    "theme_opts": {
+      "title": "<a href=\"index.html\"><div class=\"sidebar-title\"><div class=\"image\"><img src=\"../assets/img/docs-icon.png\" \\></div><div class=\"text\">cfm NetSuite Docs</div></div></a>",
+      "homepageTitle": "NetSuite Project Documentation",
+      "displayModuleHeader": true,
+      "include_css": ["docs/assets/templates/jsDocStyle.css"],
+      "codepen": {
+        "enable_for": ["examples"],
+        "options": {
+          "js_external": "https://code.jquery.com/jquery-3.6.0.min.js",
+          "js_pre_processor": "babel"
+        }
+      },
+      "base_url": "http://localhost/private/",
+      "favicon": "../assets/img/docs-icon.png",
+      "search": true,
+      "add_script_path": [
+        {
+          "src": "../assets/scripts/cs_sidebar.js",
+          "defer": "defer"
+        }
+      ]
+    }
+  },
+  "plugins": ["plugins/markdown"],
+  "markdown": {
+    "hardwrap": false,
+    "idInHeadings": true
   }
 }
