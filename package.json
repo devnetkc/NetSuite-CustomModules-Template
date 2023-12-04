@@ -22,7 +22,7 @@
     "add-ns-dependents": "npm run suitecloud -- project:adddependencies && bash .ci/scripts/rmDependents.sh",
     "generate-jsDocs": "jsdoc -c .ci/config/jsDocsConf.json && cp .ci/templates/web.config.private docs/private/web.config && cp -f docs/private/styles/clean-jsdoc-theme.min.css docs/assets/templates/clean-jsdoc-theme.min.css && cp -f .ci/templates/web.config.search.private ./docs/private/data/web.config",
     "generate-mdDocs": "npm run generate-jsDocs && jsdoc2md --template .ci/templates/README.hbs ./src/**/*[^.min].js > README.md",
-    "generate-wiki": "mkdir wiki && node .ci/config/docsMD.config.min.js && mv wiki/README.md wiki/HOME.md",
+    "generate-wiki": "mkdir -p wiki && node .ci/config/docsMD.config.min.js && mv wiki/README.md wiki/HOME.md",
     "docs": "npm run clean && npm run generate-jsDocs && npm run generate-mdDocs && npm run generate-wiki",
     "update-suitecloud-object": "node ./node_modules/@oracle/suitecloud-cli/src/suitecloud.js object:update --scriptid $npm_config_scriptid",
     "view-docs": "open ./docs/index.html || start ./docs/index.html ",
