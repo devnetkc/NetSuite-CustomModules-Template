@@ -1,0 +1,33 @@
+# @format
+
+# Production Azure Pipeline -- Validate Production Pull Requests
+# @description: Validates a Pull Request is allowed to merge with production using powershell commands
+# https://aka.ms/yaml
+
+trigger: none
+pr:
+  branches:
+    include:
+      - production
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - task: PowerShell@2
+    inputs:
+      targetType: 'inline'
+      script: |
+        $sourceBranch = ""
+        try {
+           $script:sourceBranch = "$(System.PullRequest.SourceBranch)"
+        }
+        catch {
+          exit 0
+        }
+        echo $script:sourceBranch
+        if( $script:sourceBranch -match '(\/?)sandbox$')
+        {
+          echo "sandbox cannot push in to production directly"
+            exit 1
+        }

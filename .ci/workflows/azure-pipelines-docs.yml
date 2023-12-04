@@ -4,33 +4,85 @@
 # @description: Generates documentation based on code in project, then commits changes to PR/branch. Uses variables to set git user for commits.
 # Git User:$(CI_GIT_USER)
 # Git Email:$(CI_GIT_EMAIL)
+# make sure you update the include branch to match your project structure
+# updates docs on main branch after pull request is completed and changes are merged
 # https://aka.ms/yaml
-
+#azure-pipelines-docs.yml
 variables:
+  - group: NPM-PKG-Token
+  - group: project-versions
   - name: CI_GIT_USER
     value: CHANGE ME NAME
   - name: CI_GIT_EMAIL
     value: change@this.com
+  - name: CI_BRANCH
+    value: main
 
 trigger:
   branches:
     include:
       - main
-#    exclude:
-#      - production
+
+pr: none
 
 pool:
   vmImage: ubuntu-latest
 
-steps:
-  - checkout: self
-    clean: true
-    persistCredentials: true
-  - script: |
-      git config user.email "$(CI_GIT_EMAIL)" && git config user.name "$(CI_GIT_NAME)"
-      git checkout -b $(Build.SourceBranchName)
-      npm i
-      npm run docs
-      git add -A
-      git commit -m "📝 Updating Docs [ci skip]"
-      git push --set-upstream origin $(Build.SourceBranchName)
+jobs:
+  - job: update_docs
+    displayName: Update Docs
+    condition: eq(variables.NetSuite_updateDocs, 'true')
+    steps:
+      - checkout: self
+        clean: true
+        persistCredentials: true
+      - script: |
+          git config user.email "$(CI_GIT_EMAIL)" & git config user.name "$(CI_GIT_NAME)"
+          git checkout -b "$(CI_BRANCH)"
+      - task: Npm@1
+        inputs:
+          command: 'install'
+      - script: |
+          npm run docs
+          git add -A
+          git commit -m "📝 Updating Docs [ci skip]"
+          git push --set-upstream origin "$(CI_BRANCH)"
+        env:
+          NPM_TOKEN: $(NPM_TOKEN)
+          SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+  - job: publish_docs
+    displayName: Publish Docs
+    dependsOn: update_docs
+    steps:
+      - task: CopyFiles@2
+        inputs:
+          contents: |
+            **/docs/**
+            !**node_modules**
+          targetFolder: $(Build.ArtifactStagingDirectory)
+        displayName: Stage Build Artifact
+
+      - task: AzureRmWebAppDeployment@4
+        inputs:
+          ConnectionType: 'AzureRM'
+          azureSubscription: 'YOUR_SUBSCRIPTION_ID_HERE'
+          appType: 'webApp'
+          WebAppName: 'netsuite-docs'
+          deployToSlotOrASE: true
+          ResourceGroupName: 'netsuite-docs_group'
+          SlotName: 'production'
+          packageForLinux: '$(Build.ArtifactStagingDirectory)/docs/'
+  - job: mark_updated
+    displayName: Mark Docs Updated
+    dependsOn: publish_docs
+    steps:
+      - task: MorenoBruschi.manage-variable-group-task.custom-build-release-task.ManageVariableGroupTask@0
+        displayName: 'Azure DevOps Variable Group Management'
+        inputs:
+          pat: '$(System.AccessToken)'
+          project: $(PROJECT_ID)
+          vgname: project-versions
+          orgname: YOU_ORGANIZATION_NAME_HERE
+          op: Update
+          varops: |
+            = NetSuite_updateDocs => "false"

@@ -7,55 +7,175 @@ steps:
       versionSpec: '17'
       jdkArchitectureOption: 'x64'
       jdkSourceOption: 'PreInstalled'
+    displayName: Install JDK17
   - checkout: self
     clean: true
     persistCredentials: true
+    displayName: Checkout Repository
   - script: |
+      ##  Validate Repo is Current
       # Fetch origin branches
-      git fetch --all --prune 
+      git fetch --all 
+      ## leave detached head mode
+      git checkout origin/$(HEADBRANCH)
+      git reset --hard origin/$(HEADBRANCH)
+      echo "##vso[task.setvariable variable=sfdxExitCode;]0"
+      npm i 
+      npm run setup-server-token --sourcebranch=$(SourcedBranch) --headbranch=$(HEADBRANCH) --account=$(ACCOUNT) --authid=$(AUTHID) --tokenid=$ENV_TOKENID --tokensecret=$ENV_TOKENSECRET --releaserun=$(RELEASE_RUN) --flatobjects=NO --validaterun=YES
+      ### Adding git credentials
+      git config user.email "YOUR@EMAIL_HERE.com"
+      git config user.name "Azure Pipeline"
+      ## Committing all changes temporarily, these won't be pushed
+      git add -A && git commit -m "🔮 Clearing Changes for Validation Testing"
+      npm run validate-repo-current
+    displayName: Validate Repo Current
+    env:
+      ENV_TOKENSECRET: $(TOKENSECRET)
+      ENV_TOKENID: $(TOKENID)
+      NPM_TOKEN: $(NPM_TOKEN)
+      failOnStandardError: false
+      continueOnError: false
 
+  - task: PowerShell@2
+    inputs:
+      targetType: 'inline'
+      script: |
+        $exitCode = $(sfdxExitCode)
+        $forceRelease = "$(FORCERELEASE)"
+        if ($exitCode -ne 0) {
+          Write-Host "Force Release: $forceRelease"
+          if ($forceRelease -ne "YES" ) {
+            Write-Error "Failing task since return code was {0} while expected 0."
+            Write-Host "##vso[task.logissue type=error]Changes Detected...STOPPING RELEASE!"
+            exit($exitCode)
+          } else {
+            Write-Host "##vso[task.logissue type=warning;code=100;]Changes Detected...continuing -- Forced Release"
+          }
+        } else {
+            Write-Host "No Changes Detected...continuing"
+        }
+      failOnStderr: false
+    displayName: Validate Repo is Clean
+
+  - script: |
+      ## Reset RELEASE_BUILD variable in case this is just docs or CI changes
+      echo "##vso[task.setvariable variable=RELEASE_BUILD]false"
+
+
+      ## Fetch origin branches
+      git fetch --all --prune 
+      ## leave detached head mode
+      git checkout $(SourcedBranch) --force 
+      git reset --hard origin/$(SourcedBranch)
+    displayName: Initialize Repository
+    env:
+      SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+  - script: |
+      OBJECTS_BUILD_PATH=$(BUILD_DIR)/$(OBJECTS_PATH)
+      ## Cleanup build dir if exists
+      rm -rf $(BUILD_DIR)
+      mkdir $(BUILD_DIR)
+      ##  Copy files to build directory
+      find . ! -path "*$(BUILD_DIR)*" | cpio -pdm ./$(BUILD_DIR)
+      ##  Clean out objects directory
+      rm -rf $OBJECTS_BUILD_PATH
+      mkdir $OBJECTS_BUILD_PATH
+      ##  Copy object definitions to build dir without subpath tree
+    displayName: Initialize Build Directory
+
+  - task: Bash@3
+    inputs:
+      filePath: './.ci/scripts/flattenObjectPaths.sh'
+      arguments: '$(BUILD_DIR)/$(OBJECTS_PATH) $(HEADBRANCH) $(SourcedBranch)'
+      failOnStandardError: true
+    displayName: Flatten Object Trees
+
+  - script: |
+      ##  Switch to build directory to continue deployment
+      cd $(BUILD_DIR)
+      # Fetch origin branches
+      git fetch --all --prune
       ## leave detached head mode
       git checkout $(SourcedBranch)
-
-      # Install NetSuite SDF
       npm i 
-      npm run setup-server --sourcebranch=$(SourcedBranch) --headbranch=$(HEADBRANCH) --account=$(ACCOUNT) --authid=$(AUTHID) --tokenid=$ENV_TOKENID --tokensecret=$ENV_TOKENSECRET
-
-      ## Uncomment if not using Azure DevOps Releases to deploy changes to NetSuite
+      npm run setup-server --sourcebranch=$(SourcedBranch) --headbranch=$(HEADBRANCH) --account=$(ACCOUNT) --authid=$(AUTHID) --tokenid=$ENV_TOKENID --tokensecret=$ENV_TOKENSECRET --releaserun=$(RELEASE_RUN) --flatobjects=YES --validaterun=NO
+      ### Commenting out because this is moving to release workflow
       # npm run deploy-pipeline --verbose
-
-      ## Run Jest tests
+      # SourcedBranch
       npm run test
+    displayName: Run Tests
     env:
       # NPM Token variable if using private NPM repository for packages
       # NPM_TOKEN: $(NPM_TOKEN) #uncomment to use
       # NetSuite Secret Token within Azure Library/Variables
       ENV_TOKENSECRET: $(TOKENSECRET)
+      ENV_TOKENID: $(TOKENID)
       # NetSuite Secret Token ID within Azure Library/Variables
-      ENV_TOKENID:
-        $(TOKENID)
+      NPM_TOKEN: $(NPM_TOKEN)
+      failTaskOnFailedTests: true
 
-        # Publish test results to Azure
-#          - task: PublishTestResults@2
-#            inputs:
-#              testResultsFormat: 'JUnit'
-#              testResultsFiles: '**/test-report*.xml'
-#              failTaskOnFailedTests: true
-#              testRunTitle: 'NetSuite Module Deployment Tests'
+  # - task: PublishTestResults@2
+  #   inputs:
+  #     testResultsFormat: 'JUnit'
+  #     testResultsFiles: '**/test-report*.xml'
+  #     testRunTitle: 'NetSuite Repo Tests'
+  #   displayName: Publish Test Results
+  #   condition: always()
 
-## Publish artifact to Azure for use in Release pipeline
-# Alternative would be to deploy in RunNPMScripts step
-#          - task: CopyFiles@2
-#            inputs:
-#              contents: |
-#               **
-#                !**/node_modules/**
-#                !**/.vscode/**
-#                !**/docs/**
-#                !**/resources/**
-#                !**/__tests__/**
-#              targetFolder: $(Build.ArtifactStagingDirectory)
-#          - task: PublishBuildArtifacts@1
-#            inputs:
-#              pathToPublish: $(Build.ArtifactStagingDirectory)
-#              artifactName: Build-$(buildLabel)
+  # - task: CopyFiles@2
+  #   inputs:
+  #     contents: |
+  #       **/.build/**
+  #       !**/node_modules/**
+  #       !**/.vscode/**
+  #       !**/docs/**
+  #       !**/resources/**
+  #       !**/__tests__/**
+  #     targetFolder: $(Build.ArtifactStagingDirectory)
+  #   displayName: Stage Build Artifact
+
+  # - task: PublishBuildArtifacts@1
+  #   inputs:
+  #     pathToPublish: $(Build.ArtifactStagingDirectory)
+  #     artifactName: Build-$(BuildLabel)
+  #   displayName: Publish Build Artifact
+
+  # - script: |
+  #     echo "##vso[build.addbuildtag]$(BuildLabel)"
+  #   displayName: Add Build Tag
+  #   condition: and(succeeded(), eq(variables['RELEASE_BUILD'], 'true'))
+  #   env:
+  #     SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+
+  - task: PowerShell@2
+    inputs:
+      targetType: 'inline'
+      script: |
+
+        ## Update Project Release Version based on projects package.json version
+        $VERSION = "$(cat package.json | grep 'version' | cut -d ':' -f 2 )"
+        $SAVE_VERSION = $VERSION -replace '"|,',''
+        $VariableGroupId = GROUP_ID_NUMBER
+        $NewValue = $SAVE_VERSION
+        $VariableName = NetSuite_version"
+
+        Write-Host "NewValue : $NewValue"
+
+        $url = "$($env:SYSTEM_TEAMFOUNDATIONCOLLECTIONURI)$env:SYSTEM_TEAMPROJECTID/_apis/distributedtask/variablegroups/$($VariableGroupId)?api-version=5.1-preview.1"
+
+        Write-Host "URL: $url"
+
+        $authHeader = @{Authorization = "Bearer $env:SYSTEM_ACCESSTOKEN"}
+
+        $definition = Invoke-RestMethod -Uri $url -Headers $authHeader
+
+        Write-Host "Pipeline = $($definition | ConvertTo-Json -Depth 100)"
+
+        $definition.variables.$VariableName.Value = "$($NewValue)"
+
+        $definitionJson = $definition | ConvertTo-Json -Depth 100 -Compress
+
+        Invoke-RestMethod -Method Put -Uri $url -Headers $authHeader -ContentType "application/json" -Body ([System.Text.Encoding]::UTF8.GetBytes($definitionJson)) | Out-Null
+    displayName: Update Project Version
+    env:
+      SYSTEM_ACCESSTOKEN: $(System.AccessToken)

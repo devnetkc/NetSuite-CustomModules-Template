@@ -1,6 +1,6 @@
 # @format
 
-# Sandbox 1 Azure Pipeline -- Validate Production Pull Requests
+# Sandbox 2 Azure Pipeline -- Validate Production Pull Requests
 # @description: Creates release for a branch
 # https://aka.ms/yaml
 
@@ -16,7 +16,7 @@ parameters:
 
 variables:
   - group: Base-NS-Deploy-Vars
-  - group: sb-deploy-acct
+  - group: sb2-deploy-acct
   - group: NPM-PKG-Token
   - group: project-versions
   - name: cancelPriorDeployments
