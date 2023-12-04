@@ -1,19 +1,18 @@
 /**
  * @format
  * @module aModule
- * @description Your custom NetSuite module A
  * @version 1.0.0
  * @NApiVersion 2.1
  * @preserve NApiVersion
  * @since 2022.2
- * @summary This is example custom NetSuite module A.  It may or may not be in your SuiteCloud project.
+ * @description This is example custom NetSuite module A.  It may or may not be in your SuiteCloud project.
  * Update your `jest.config.js` to map this module from the stub pkg to your local project if it is available.
  * See project `jest.config.js` for further examples of this.
  */
 (() => {
   /**
    * @name Dependencies
-   * @memberof module:aModule
+   * @memberof module:/SuiteScripts/Modules/aModule
    * @type {Array}
    * @description Array of dependencies the module requires
    * @ignore
@@ -37,7 +36,7 @@
 })();
 
 /**
- * @alias module:aModule
+ * @module module:/SuiteScripts/Modules/aModule
  * @description NetSuite module A export function
  * @param {Object} query - NS query module
  * @param {Object} log - NS log module
@@ -47,7 +46,7 @@ function aModule(query, log) {
    * @name GetVendorPrefix
    * @description Returns preferred vendor prefix from record or blank if no prefix is located
    * @function
-   * @memberof module:aModule
+   * @memberof module:/SuiteScripts/Modules/aModule
    * @param {String} vendorId - Entity ID of vendor Ex: `4321`
    * @return {String}
    */ const GetVendorPrefix = vendorId => {
@@ -57,7 +56,7 @@ function aModule(query, log) {
   };
   /**
    * @name RunQuery
-   * @memberof module:aModule
+   * @memberof module:/SuiteScripts/Modules/aModule
    * @description Returns query result of vendor prefix from vendor record
    * @function
    * @protected
