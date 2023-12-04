@@ -12,7 +12,7 @@
     "recurse": true,
     "template": "node_modules/clean-jsdoc-theme",
     "theme_opts": {
-      "title": "<a href=\"index.html\"><div class=\"sidebar-title\"><div class=\"image\"><img src=\"../assets/img/docs-icon.png\" \\></div><div class=\"text\">cfm NetSuite Docs</div></div></a>",
+      "title": "<a href=\"index.html\"><div class=\"sidebar-title\"><div class=\"image\"><img src=\"../assets/img/docs-icon.png\" \\></div><div class=\"text\">NetSuite Docs</div></div></a>",
       "homepageTitle": "NetSuite Project Documentation",
       "displayModuleHeader": true,
       "include_css": ["docs/assets/templates/jsDocStyle.css"],
