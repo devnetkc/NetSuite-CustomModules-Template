@@ -1,0 +1,27 @@
+/** @format */
+
+h1,
+h2,
+h3 {
+  overflow-wrap: break-word;
+}
+.sidebar-title .image {
+  width: 2vw;
+}
+
+.sidebar-title .image img {
+  width: 100%;
+}
+
+.sidebar-title .image,
+.sidebar-title .text {
+  display: inline-block;
+  vertical-align: bottom;
+}
+
+.sidebar-items-container {
+  margin-top: 3rem !important;
+}
+.sidebar-section-children {
+  overflow-wrap: break-word;
+}

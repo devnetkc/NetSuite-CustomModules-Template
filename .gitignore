@@ -5,7 +5,11 @@
 src/deploy.xml
 src/manifest.xml
 ## We don't need to track css changes since sass can be auto-compiled to css on deployment
+# Ignore CSS files
 *.css
+# But not in the /docs directory
+!/docs/**/*.css
+
 ## We do not need to track changes to project.json all the time
 ## One default user is fine for now
 project.json
