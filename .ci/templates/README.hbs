@@ -37,7 +37,7 @@ Using the directory path `/SuiteScript/...`, we can provide aliases locally for 
 -   [`README.hbs`](./.ci/templates/README.hbs) -- Base template file the project README.md is generated from
 -   [`npmrc`](./.npmrc) -- NPM environment token loader file for publishing project _(Note: the variable name `NPM_TOKEN` can be changed for multiple tokens)_
 -   [`docsMD.config`](./.ci/config/docsMD.config.js) -- Wiki MD generator from JSDoc notations
--   [`jsDocsConf.json`](./.ci/config/jsDocsConf.json) -- JSDocs configuration file
+-   [`jsDocsConf.json`](./.ci/config/jsDocsConf.json) -- JSDocs configuration file. **Important:** For hosted documentation, especially when using `azure-pipelines-docs.yml`, update the `base_url` in this file from `localhost` to your documentation's hosted URL.
 
 ## 🔨 Scripts
 
