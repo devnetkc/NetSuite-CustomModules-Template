@@ -37,7 +37,7 @@ const CustomModulePaths = [
     path: '<rootDir>src/FileCabinet/SuiteScripts/Modules/aModule',
   },
   {
-    module: '/SuiteScripts/Modules/aModule',
+    module: '/SuiteScripts/Modules/aModule.min',
     path: '<rootDir>src/FileCabinet/SuiteScripts/Modules/aModule.js',
   },
   {
