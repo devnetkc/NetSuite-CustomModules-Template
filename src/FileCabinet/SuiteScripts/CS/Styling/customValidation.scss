@@ -1,0 +1,65 @@
+/**
+ * @format
+ * Validation Styles
+ * Sample Validation Styles (for demonstration purposes)
+ *
+ */
+
+.validation {
+  margin-top: 10px;
+  font-size: 14px;
+
+  &.error {
+    color: #ff0000; /* Red color for error messages */
+  }
+
+  &.success {
+    color: #00cc00; /* Green color for success messages */
+  }
+}
+
+/**
+   * Input Field Styles
+   */
+
+.input-field {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/**
+   * Error and Success Message Styles
+   */
+
+.error-message,
+.success-message {
+  font-size: 12px;
+}
+
+.error-message {
+  color: #ff0000; /* Red color for error messages */
+}
+
+.success-message {
+  color: #00cc00; /* Green color for success messages */
+}
+
+/**
+   * Validation Icon Styles
+   */
+
+.validation-icon {
+  margin-left: 5px;
+  font-size: 16px;
+
+  &.error {
+    color: #ff0000; /* Red color for error icon */
+  }
+
+  &.success {
+    color: #00cc00; /* Green color for success icon */
+  }
+}

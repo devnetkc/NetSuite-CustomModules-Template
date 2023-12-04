@@ -1,94 +1,126 @@
 #!/bin/bash
-## Reset Manifest
-cp ./.ci/templates/manifest.tpl.xml src/manifest.xml
+# Script Usage: Test with `npm run generate-manifests --headbranch=production --sourcebranch=sandbox`
 
-## Store branch name for release
+## Initial Checks and Setup
+### Checks if deploy.xml exists and exits if on a release run
+# deployFile: Flag to check existence of deploy.xml (0 = not exist, 1 = exist)
+# FLAT_OBJECTS: Flag to determine if flat object paths are used ("NO" by default)
+# GIT_BRANCHES: Specifies the range of branches to consider for deployment
+deployFile=0
+FLAT_OBJECTS="NO"
+GIT_BRANCHES="origin/$1..$2"
+
+### Exit Logic for Existing deploy.xml on Release Run
+# Exits if deploy.xml exists and script is run for a release
+if test -f "src/deploy.xml"; then
+    deployFile=1
+fi
+echo "Deploy: $3"
+if [[ $deployFile && $3 == "YES" ]]; then
+    echo "File already created"
+    cat "src/deploy.xml"
+    exit 0
+fi
+
+### Configuration for Object Directory and Repository Validation
+# Checks and sets flags based on script arguments for object directory usage and repo validation
+echo "Use Build Directory: $4"
+if [[ $4 == "YES" ]]; then
+    FLAT_OBJECTS="YES"
+    echo "Use flat Object paths on"
+fi
+echo "Running Validation: $5"
+if [[ $5 == "YES" ]]; then
+    GIT_BRANCHES="origin/$1..origin/$2"
+    echo "Validating Repo"
+fi
+
+## Manifest and Branch Setup
+### Resetting and Storing Manifest and Branch Information
+# Copies template manifest and stores the branch name for release
+cp ./.ci/templates/manifest.tpl.xml src/manifest.xml
 echo "$2" >./.ci/.branch
 
-## Declare variables
-### Create xml schema variables
+## Variable Declaration
+### Defining Schema and Regex Patterns for Processing
+# Variables for XML schema and various regex patterns for file and object identification
 endOfLine="</path>\n"
-
-### Create regex strings to test with
 srcRegex='src\/.*'
 attributesRegex='.*\.attributes.*'
 fileRegex='src\/FileCabinet\/SuiteScripts.*'
 objectRegex='src\/Objects\/.*'
 objectScriptPathRegex='.*scriptfile.*'
-
-### Output strings for File and Object lines
-#### Add more here if using other branches of deploy.xml schema
 FILELINE=
 OBJECTLINE=
-## Read git log for files impacted since origin headbranch -- reverts are also in the log
+filePathRegex="\(.*\)/\(.*\)"
+
+### Preparation for File and Object List Generation
+# Initializes the object file list for pipeline testing
+printf "" >objectFileList.pipeline-test.txt
+
+## Git Log Processing
+### Reading Git Log to Identify Modified Files
+# Processes git log to update src files in the deployment, excluding certain file types
 while read line; do
-    ### We only want to update src files in deployment
+    if [[ $line =~ \.(scss|sass|css)$ && $line != *.min.css ]]; then
+        continue
+    fi
     if [[ "$line" =~ $srcRegex ]]; then
-        ### Test if file exists, if not we can skip it and import as dependency later
-        if ! test -f "$line"; then
+        ADJUSTED_LINE="$line"
+        if [[ "$line" =~ $objectRegex && $FLAT_OBJECTS == "YES" ]]; then
+            fileName=$(echo "$line" | sed "s:$filePathRegex:\2:g")
+            ADJUSTED_LINE="src/Objects/$fileName"
+        fi
+        echo "Evaluating: $ADJUSTED_LINE"
+        if ! test -f "$ADJUSTED_LINE"; then
             continue
         fi
-
-        ### Setup what the new line will look like
-        newLine=$(echo "$line" | sed "s/src\//\t<path>~\//")"$endOfLine"
-
-        ### Skip duplicates -- lines which are already prepped to go in to deploy.xml
+        newLine=$(echo "$ADJUSTED_LINE" | sed "s/src\//\t<path>~\//")"$endOfLine"
         if [[ $OBJECTLINE == *"$newLine"* || $FILELINE == *"$newLine"* ]]; then
             continue
         fi
 
-        ### Separate Files & Objects to build deploy.xml
-        if [[ "$line" =~ $fileRegex ]]; then
-            if [[ "$line" =~ $attributesRegex ]]; then
+        ### File and Object Separation for deploy.xml
+        # Differentiates and processes files and objects for deployment
+        if [[ "$ADJUSTED_LINE" =~ $fileRegex ]]; then
+            if [[ "$ADJUSTED_LINE" =~ $attributesRegex ]]; then
                 continue
             fi
-            #### Is a file update
             FILELINE+="\t${newLine}"
-        elif [[ "$line" =~ $objectRegex ]]; then
-            ### Test line to see if the object needs a file path dependency added
+        elif [[ "$ADJUSTED_LINE" =~ $objectRegex ]]; then
             while read OBJLINE; do
                 if [[ "$OBJLINE" =~ $objectScriptPathRegex ]]; then
-                    #### Modify line to deploy.xml schema
                     SCRIPTPATH=$(echo "$OBJLINE" | sed "s/<scriptfile>\[/\/src/")
                     SCRIPTPATH=$(echo "${SCRIPTPATH}" | sed "s/\]<\/scriptfile>//")
                     depLine=$(echo "${SCRIPTPATH}" | sed "s/\/src\//\t<path>~\/FileCabinet\//")"$endOfLine"
                     CLEANPATH=$(echo "$SCRIPTPATH" | sed "s/src\///")
                     regexLineStr=".*$CLEANPATH"
-
-                    #### Check if dependency file is already in file paths list
                     if [[ "$FILELINE" =~ $regexLineStr ]]; then
                         continue
                     fi
-
-                    ##### Add to dependency to file list
                     FILELINE+="\t${depLine}"
                 fi
-            done < <(cat "./${line}")
-
-            #### Is an object file update
+            done < <(cat "./${ADJUSTED_LINE}")
+            echo "${ADJUSTED_LINE}" >>objectFileList.pipeline-test.txt
             OBJECTLINE+="\t${newLine}"
         fi
     fi
-    ### Clear line variable
     line=""
-done < <(git log --oneline --stat origin/$1..$2 --name-only)
+done < <(git log --oneline --stat "$GIT_BRANCHES" --name-only)
 
-## Generate deploy.xml file
-### Define output string variable
+## Deploy.xml Generation
+### Constructing deploy.xml Based on File and Object Modifications
+# Generates deploy.xml file with updated paths for files and objects based on git log
 OUTPUTLINES=""
-
-### If file path entries is > 0 add files to deploy.xml
 if [[ $FILELINE ]]; then
+    echo "##vso[task.setvariable variable=RELEASE_BUILD]true"
     OUTPUTLINES="<files>\n${FILELINE}\t</files>"
 fi
-
-### If object path entries is > 0 add objects to deploy.xml
 if [[ $OBJECTLINE ]]; then
+    echo "##vso[task.setvariable variable=RELEASE_BUILD]true"
     OUTPUTLINES="${OUTPUTLINES}\n\t<objects>\n${OBJECTLINE}\t</objects>"
 fi
-
-### Print output to custom updated deploy.xml
-# shellcheck disable=SC2059
+echo "Writing Output"
 printf "<deploy>
     <configuration>
         <path>~/AccountConfiguration/*</path>
@@ -99,5 +131,7 @@ printf "<deploy>
     </translationimports>
 </deploy>" >src/deploy.xml
 
-## Echo output for logging
+## Log Output
+### Displaying the Final deploy.xml for Verification
+# Outputs the final content of deploy.xml for logging and verification purposes
 cat src/deploy.xml

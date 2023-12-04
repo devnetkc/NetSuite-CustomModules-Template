@@ -1,7 +1,8 @@
 /**
  * @format
  * @name JestConfig
- * @description Jest config file for project
+ * @description Jest config file for project. This file can be modified for simplicity
+ *              based on project requirements. Areas for potential simplification are noted below.
  * @exports BuildJestConfig
  */
 
@@ -10,11 +11,17 @@ const cliConfig = require('./suitecloud.config');
 
 const SuiteCloudJestStubs = require('suitecloud-unit-testing-stubs/SuiteCloudJestStubs');
 // Load your npm custom module stub pkg
+// Note: This can be omitted for simpler projects that do not require additional custom stubs.
 const CustomJestStubs = require('@vnetwork-solutions/ns-custom-stubs-template/customJestStubs');
 
-const SuiteCloudJestCustomStubs = SuiteCloudJestStubs.customStubs;
 // Add your custom stubs to SuiteCloudJestStubs
+// Note: For minimal configurations, you can directly use SuiteCloudJestCustomStubs without MyCustomStubs.
 const MyCustomStubs = CustomJestStubs.customStubs;
+// Load custom module paths for Jest
+const ModulePaths = require('./.ci/config/jest/modulePaths.min');
+
+const SuiteCloudJestCustomStubs = SuiteCloudJestStubs.customStubs;
+
 /**
  * @typedef UseMinified
  * @type {Object}
@@ -35,6 +42,7 @@ const MyCustomStubs = CustomJestStubs.customStubs;
  * @name ExcludeStubs
  * @type {ExcludeStub[]}
  * @description Array of modules from stub pkg to override with local version
+ * Note: For a minimal configuration, this array can be empty or removed if not needed.
  */
 const ExcludeStubs = [
   {
@@ -50,23 +58,37 @@ const ExcludeStubs = [
  * @name BuildJestConfig
  * @function
  * @description Builds Jest config file using stubs and SuiteCloud config
+ * Merge custom module paths with SuiteCloud custom stubs
  * @since 2022.2
  */
 const BuildJestConfig = SuiteCloudJestConfiguration.build({
   testResultsProcessor: './node_modules/jest-junit-reporter',
   projectFolder: cliConfig.defaultProjectFolder,
   projectType: SuiteCloudJestConfiguration.ProjectType.ACP,
-  customStubs: SuiteCloudJestCustomStubs.concat(MyCustomStubs(ExcludeStubs)),
+  customStubs: SuiteCloudJestCustomStubs.concat(
+    ModulePaths.CustomModulePaths
+  ).concat(
+    // Note: For simpler projects, you can remove MyCustomStubs(ExcludeStubs) concatenation.
+    MyCustomStubs(ExcludeStubs)
+  ),
   testPathIgnorePatterns: [
     '(/__tests__/.*|(\\.|/)(test|spec))\\.[jt]sx?$',
     '**.*\\.min\\.*',
   ],
   collectCoverageFrom: [
+    // Note: Coverage collection can be simplified or omitted based on project needs.
     '**/*.{js,jsx}',
     '!**/node_modules/**',
     '!**/__tests__/**',
     '!**/**min.js',
   ],
+  moduleDirectories: ['node_modules'],
+  modulePaths: [
+    '<rootDir>',
+    '<rootDir>/node_modules',
+    '<rootDir>/src/FileCabinet',
+  ],
+  testEnvironment: 'jsdom',
 });
 
 module.exports = BuildJestConfig;

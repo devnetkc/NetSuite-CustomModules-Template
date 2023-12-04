@@ -1,4 +1,7 @@
 # @format
+
+# Sandbox 1 Azure Pipeline -- Validate Production Pull Requests
+# @description: Creates release for a branch
 # https://aka.ms/yaml
 
 trigger: none
@@ -15,10 +18,9 @@ variables:
   - group: Base-NS-Deploy-Vars
   - group: sb-deploy-acct
   - group: NPM-PKG-Token
+  - group: project-versions
   - name: cancelPriorDeployments
     value: '${{ parameters.cancelPriorDeployments }}'
-  - name: TestList
-    value: '[Modules-Query]=Modules/Query,[Modules-Record]=Modules/Record,[Modules-Task]=Modules/Task,[Modules-Utility]=Modules/Utility,[Modules-Validate]=Modules/Validate'
   - name: SourcedBranch
     value: $(SOURCEBRANCH)
 
@@ -53,26 +55,8 @@ stages:
                 }
             condition: eq(variables.cancelPriorDeployments, 'true')
   - stage: BuildProject
-    displayName: Deploy Update
+    displayName: Deploy NetSuite
     jobs:
       - job: BuildRelease
         steps:
           - template: azure-pipelines-build.yml
-  - stage: SetBuildTagStage
-    displayName: Add Build Tags
-    jobs:
-      - job: SetBuildTagJob
-        displayName: Add Build Tag via PR Tag
-        pool:
-          vmImage: 'windows-latest'
-        steps:
-          - checkout: none
-          - task: PowerShell@2
-            displayName: 'Add Build Tag'
-            condition: succeeded() # Only when all previous tasks have succeeded
-            env:
-              SYSTEM_ACCESSTOKEN: $(System.AccessToken)
-            inputs:
-              targetType: inline
-              script: |
-                Write-Host "##vso[build.addbuildtag]$env:buildLabel"

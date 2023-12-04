@@ -1,81 +1,92 @@
-# 🚀 Introduction
+# 🚀 NetSuite SuiteScript Project Template: Module Testing & CI/CD Integration
 
-This project is meant to serve as a baseline template project for getting tests implemented easier in to your NetSuite SuiteCloud projects. This project demonstrates how to create and use:
+## 🚀 Introduction
 
--   Custom NetSuite modules
--   Test modules using Jest
--   Import your custom stubs package for Jest test
--   Integrate continuos integration/deployment pipelines for your project
+Welcome to the NetSuite SuiteScript Project Template - a cutting-edge solution tailored for module testing and CI/CD integration within the NetSuite ecosystem. This project is meticulously aligned with **NS 2023.2**, ensuring up-to-date compatibility and performance.
 
-This is currently based on **NS 2022.2**
+Designed to work seamlessly with the [NetSuite-Cust-Jest-Stubs-Template](https://github.com/devnetkc/NetSuite-Cust-Jest-Stubs-Template), this template stands as a pivotal tool for NetSuite developers. It facilitates the creation, testing, and deployment of custom SuiteScript modules, promoting efficiency and reliability in the development process.
 
-This project pairs with the [NetSuite-Cust-Jest-Stubs-Template](https://github.com/devnetkc/NetSuite-Cust-Jest-Stubs-Template) tutorial/template npm package project.
+### Core Features
 
-Using the directory path `/SuiteScript/...`, we can provide aliases locally for these modules while still being available in NetSuite -- as the root directory for SuiteScript files in NetSuite is `/SuiteScripts/`.
+- **SuiteScript Module Development:** Crafted specifically for SuiteScript, it acts as an essential starting point for scripting, adhering to NetSuite's best practices and standards.
+- **Automated Module Testing:** Integrating Jest for automated testing, it ensures your SuiteScript modules function flawlessly, enhancing code reliability.
+- **Custom Stub Integration:** Allows for the integration of custom Jest stubs, simulating NetSuite's API for isolated testing.
+- **CI/CD Integration:** Comes with pre-configured Azure Pipeline configurations, automating the integration and deployment processes.
+- **Documentation Generation:** Utilizes JSDoc comments and Markdown for automatic, detailed documentation of SuiteScript modules.
+
+Local aliases for SuiteScript modules are effectively managed using the `/SuiteScript/...` path, ensuring compatibility with the NetSuite SuiteScript root directory `/SuiteScripts/`. This feature simplifies the management of scripts and aligns with NetSuite's directory structure.
+
+### Targeted Use Cases
+
+- **NetSuite SuiteScript Developers:** Ideal for crafting and managing custom scripts within NetSuite.
+- **Quality Assurance and Testing:** Ensures rigorous testing routines for NetSuite customizations.
+- **CI/CD Pipeline Integration:** Seamlessly integrates SuiteScript development into CI/CD workflows.
+- **Documentation and Maintenance:** Automates documentation for easy maintenance and understanding of scripts.
+
+Leverage this template to elevate your SuiteScript development workflow, ensuring robust, well-tested, and efficiently integrated scripts within your NetSuite environment.
 
 ## 🎉 Getting Started
 
-1.  Open [`./package.json`](./package.json) and customize the project configuration
-2.  Add your own `ExcludeStubs` path aliases to  [`jest.config.js`](./jest.config.js)
-3.  Create a local environment variable `NPM_TOKEN` using your NPM token for the value _(Note: this variable name can be changed within the [`.npmrc`](./.npmrc) file)_
-4.  Run `npm i` to install the project dependencies
-5.  Run `npm run generate-manifests` to create local deploy.xml and manifest files **Required files to use SuiteCloud tools**
-6.  Setup SuiteCloud account details
-    -   CLI _(Note: update `$()` variables with your own values)_
-        ```JS
-        npm run setup-server --sourcebranch=$(SOURCEBRANCH) --headbranch=$(HEADBRANCH) --account=$(ACCOUNT) --authid=$(AUTHID) --tokenid=$(TOKENID) --tokensecret=$(TOKENSECRET)
-        ```
-    -   VSCode
-        -   Open command pallet
-            -   MacOS:`CMD + SHIFT + p` 
-            -   Win: `CTRL + SHIFT + p`
-        -   Select & Run `SuiteCloud: Set Up Account`
+1. Open [`./package.json`](./package.json) and customize the project configuration.
+2. Add your `ExcludeStubs` path aliases to [`jest.config.js`](./jest.config.js).
+3. Create a local environment variable `NPM_TOKEN` using your NPM token (variable name can be changed in [`.npmrc`](./.npmrc)).
+4. Run `npm i` to install project dependencies.
+5. Run `npm run generate-manifests` to create `deploy.xml` and `manifest.xml`, essential for SuiteCloud tools.
+6. Setup SuiteCloud account details:
+    - CLI (update `$()` variables with your values): `npm run setup-server --sourcebranch=$(SOURCEBRANCH) --headbranch=$(HEADBRANCH) --account=$(ACCOUNT) --authid=$(AUTHID) --tokenid=$(TOKENID) --tokensecret=$(TOKENSECRET)`
+    - VSCode: Open command pallet (`CMD + SHIFT + p` on MacOS, `CTRL + SHIFT + p` on Windows), then select & run `SuiteCloud: Set Up Account`.
 
 ## 🧐 Notable Files
 
--   [`manifest.tpl.xml`](./ci/templates/manifest.tpl.xml) -- Used to create SuiteCloud project manifest (**Project Name Change Required**)
--   [`README.hbs`](./.ci/templates/README.hbs) -- Base template file the project README.md is generated from
--   [`npmrc`](./.npmrc) -- NPM environment token loader file for publishing project _(Note: the variable name `NPM_TOKEN` can be changed for multiple tokens)_
--   [`docsMD.config`](./.ci/config/docsMD.config.js) -- Wiki MD generator from JSDoc notations
--   [`jsDocsConf.json`](./.ci/config/jsDocsConf.json) -- JSDocs configuration file
+- [`manifest.tpl.xml`](./ci/templates/manifest.tpl.xml) - Template for SuiteCloud project manifest. (Project Name Change Required)
+- [`README.hbs`](./.ci/templates/README.hbs) - Base template for generating project README.md.
+- [`npmrc`](./.npmrc) - NPM environment token loader for publishing (variable name `NPM_TOKEN` can be changed).
+- [`docsMD.config`](./.ci/config/docsMD.config.js) - Generator for Markdown documentation from JSDoc notations.
+- [`jsDocsConf.json`](./.ci/config/jsDocsConf.json) - Configuration for JSDoc generation. Update `base_url` from `localhost` for hosted documentation.
+- New scripts like `flattenObjectPath.sh`, `rmDependents.sh`, and `web.config.private` for improved project management.
 
 ## 🔨 Scripts
 
-Use `npm run <script>` to execute various commands for the project
+Use `npm run <script>` to execute various project commands:
 
--   `npm run test` -- Uses Jest to run tests (see [Running Tests](#-running-tests) for more details.)
--   `npm run docs` -- Generates project documentation based on JSDoc notations (Configure with [docsMD.config](./.ci/config/docsMD.config.js) && [jsDocsConf.json](./.ci/config/jsDocsConf.json)) *(Note: also updates contributor list)*
--   `npm run open-docs` -- Opens documentation in browser for viewing
--   `npm run generate-manifests` -- Generates empty `deploy.xml` && `manifest.xml` in local project to satisfy SDF as being a SuiteCloud project
--   `npm run generate-manifests --headbranch=main --sourcebranch=dev` -- Generates change based `deploy.xml` && `manifest.xml` in local project based on source and head branch differences _(Note: script files referenced in changed Object files will be included in deploy.xml files if they exist, even if there was no changes made to them)_
+- `npm run test` - Run tests using Jest. (See [Running Tests](#-running-tests) for details.)
+- `npm run docs` - Generate project documentation from JSDoc notations (configure with [docsMD.config](./.ci/config/docsMD.config.js) & [jsDocsConf.json](./.ci/config/jsDocsConf.json)).
+- `npm run open-docs` - Open documentation in a browser for viewing.
+- `npm run generate-manifests` - Generate `deploy.xml` & `manifest.xml` for SuiteCloud.
+- `npm run generate-manifests --headbranch=main --sourcebranch=dev` - Generate change-based `deploy.xml` & `manifest.xml`.
 
 ### ✅ Running Tests
 
--   `npm run test` -- Uses Jest to run test files in `./__tests__` directory
--   `npm run test-ci` -- Uses Jest to run test files in `./__tests__` directory in CI mode creating junit report with it
--   `npm run test --watch=watch` -- Runs Jest tests in watch mode
--   `npm run view-coverage` -- Runs Jest tests and opens coverage report in browser window
+- `npm run test` - Run Jest tests in `./__tests__`.
+- `npm run test-ci` - Run Jest tests in CI mode, creating junit reports.
+- `npm run test --watch=watch` - Run Jest tests in watch mode.
+- `npm run view-coverage` - Run tests and open coverage report.
 
 #### Wallaby.js
 
 [![Wallaby.js](https://img.shields.io/badge/wallaby.js-powered-blue.svg?style=flat&logo=github)](https://wallabyjs.com/oss/)
 
-This repository contributors are welcome to use
-[Wallaby.js OSS License](https://wallabyjs.com/oss/) to get
-test results immediately as you type, and see the results in
-your editor right next to your code.
+Repository contributors can use the [Wallaby.js OSS License](https://wallabyjs.com/oss/) for immediate test results.
 
 ## 👷 CI/CD
 
-Azure yaml pipeline files are provided in [`.ci/workflows`](./.ci/workflows).
+Azure yaml pipeline files in [`.ci/workflows`](./.ci/workflows) are designed to automate and streamline the CI/CD processes for different deployment scenarios:
 
--   [`azure-pipelines-docs.yml`](./.ci/workflows/azure-pipelines-docs.yml) -- Generates documentation, commits,and pushes back to current PR/branch
--   [`azure-pipelines-build-deploy.yml`](./.ci/workflows/azure-pipelines-build-deploy.yml) -- Runs Jest tests, generates a change based deploy.xml, updates manifest dependencies, and uses SuiteCloud CLI to deploy projects
+- [`azure-pipelines-docs.yml`](./.ci/workflows/azure-pipelines-docs.yml): Generates project documentation based on JSDoc comments, commits the changes, and pushes them back to the current PR or branch. This ensures that the documentation is always up-to-date with the codebase.
+- [`azure-pipelines-build-deploy.yml`](./.ci/workflows/azure-pipelines-build-deploy.yml): Executes Jest tests, generates a change-based `deploy.xml`, updates manifest dependencies, and uses the SuiteCloud CLI to deploy the project to NetSuite. This pipeline ensures that only tested and verified changes are deployed.
+- [`azure-pipelines-build-prod.yml`](./.ci/workflows/azure-pipelines-build-prod.yml): Tailored for production environment deployments. It validates production pull requests and creates a release for the main branch.
+- [`azure-pipelines-build-sb.yml`](./.ci/workflows/azure-pipelines-build-sb.yml): Focused on deployments to a Sandbox 1 environment. It facilitates testing and validation in a sandbox before changes are moved to production.
+- [`azure-pipelines-build-sb2.yml`](./.ci/workflows/azure-pipelines-build-sb2.yml): Similar to `azure-pipelines-build-sb.yml` but targets a Sandbox 2 environment, providing an additional layer of testing or for separate feature testing.
+- [`azure-pipelines-select-branch.yml`](./.ci/workflows/azure-pipelines-select-branch.yml): Assists in determining the source branch for a pull request, ensuring that the correct branch is used for comparisons and deployments in CI/CD processes.
+- [`azure-pipelines-validate-prod-pr.yml`](./.ci/workflows/azure-pipelines-validate-prod-pr.yml): Validates pull requests against the production branch, ensuring that only approved and compliant changes are merged.
 
-{{CONTRIBUTORS}}
+These pipelines collectively support a robust and flexible CI/CD process, enabling automatic testing, documentation updates, and deployment to various environments, ensuring consistency and reliability in software delivery.
+
 
 ## 📝 Documentation
 
+Comprehensive project documentation is available, detailing setup, configuration, and usage instructions.
+
 {{>main}}
 
-Happy Coding! 🥳 
+Happy Coding! 🥳

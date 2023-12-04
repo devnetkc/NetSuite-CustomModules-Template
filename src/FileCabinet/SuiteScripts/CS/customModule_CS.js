@@ -13,7 +13,7 @@
 (() => {
   /**
    * @name Dependencies
-   * @memberof module:csExampleModule_CS
+   * @memberof module:/SuiteScripts/CS/csExampleModule_CS
    * @type {Array}
    * @description Array of dependencies the client script module requires
    * @ignore
@@ -41,7 +41,7 @@
 })();
 
 /**
- * @alias module:csExampleModule_CS
+ * @alias module:/SuiteScripts/CS/csExampleModule_CS
  * @description Custom NetSuite Client Script module export function
  * @param {Object} log - NS log module
  * @param {Object} aModule - Custom NetSuite module A
@@ -50,7 +50,7 @@
 function csExampleModule_CS(log, aModule, bModule) {
   /**
    * @name pageInit
-   * @memberof module:csExampleModule_CS
+   * @memberof module:/SuiteScripts/CS/csExampleModule_CS
    * @function
    * @param  {Object} scriptContext - Passed parameter for NetSuite CS pageInit entry function
    * @param {Record} scriptContext.currentRecord - Current form record
@@ -76,7 +76,7 @@ function csExampleModule_CS(log, aModule, bModule) {
   };
   /**
    * @name saveRecord
-   * @memberof module:csExampleModule_CS
+   * @memberof module:/SuiteScripts/CS/csExampleModule_CS
    * @function
    * @param  {Object} scriptContext -- Passed parameter for NetSuite CS saveRecord entry function
    * @param  {Object} scriptContext.currentRecord -- Current record being saved

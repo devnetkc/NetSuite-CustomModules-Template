@@ -1,4 +1,20 @@
+<!--
+    This XML manifest file is used for defining a NetSuite customization project.
+    It specifies project details, framework version, and dependencies.
+-->
 <manifest projecttype="ACCOUNTCUSTOMIZATION">
-    <projectname>PROJECTNAME</projectname>
+    <projectname>PROJECTNAME</projectname><!-- Define your project name here. -->
     <frameworkversion>1.0</frameworkversion>
+    <dependencies>
+        <objects>
+            <!--
+                Example object dependencies that you can include in your template file.
+                Modify or add additional objects as needed for your project.
+            
+            <object>customrole_company_branch_manager</object>
+            <object>customlist_case_file_brands</object>
+            <object>customlist_case_file_brands.val_16057214_5782747_394</object>
+            -->
+        </objects>
+    </dependencies>
 </manifest>

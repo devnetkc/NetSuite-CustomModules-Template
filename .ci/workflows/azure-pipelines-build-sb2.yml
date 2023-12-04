@@ -1,0 +1,62 @@
+# @format
+
+# Sandbox 2 Azure Pipeline -- Validate Production Pull Requests
+# @description: Creates release for a branch
+# https://aka.ms/yaml
+
+trigger: none
+
+pr: none
+
+parameters:
+  - name: cancelPriorDeployments
+    displayName: Cancel prior deployments
+    type: boolean
+    default: true
+
+variables:
+  - group: Base-NS-Deploy-Vars
+  - group: sb2-deploy-acct
+  - group: NPM-PKG-Token
+  - group: project-versions
+  - name: cancelPriorDeployments
+    value: '${{ parameters.cancelPriorDeployments }}'
+  - name: SourcedBranch
+    value: $(SOURCEBRANCH)
+
+stages:
+  - stage: CancelPriorDeploymentsStage
+    displayName: Cancel prior deployments
+    jobs:
+      - job: CancelPriorDeploymentsJob
+        displayName: List builds, cancel prior in progress
+        pool:
+          vmImage: 'windows-latest'
+        steps:
+          - checkout: none
+          - task: PowerShell@2
+            displayName: Powershell AzDO Invoke-RestMethod
+            env:
+              SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+            inputs:
+              targetType: inline
+              script: |
+                $header = @{ Authorization = "Bearer $env:SYSTEM_ACCESSTOKEN" }
+                $buildsUrl = "$(System.TeamFoundationCollectionUri)$(System.TeamProject)/_apis/build/builds?api-version=$(devOpsApiVersion)"
+                Write-Host "GET $buildsUrl"
+                $builds = Invoke-RestMethod -Uri $buildsUrl -Method Get -Header $header
+                $buildsToStop = $builds.value.Where({ ($_.status -eq 'inProgress') -and ($_.definition.name -eq "$(Build.DefinitionName)") -and ($_.id -lt $(Build.BuildId)) })
+                ForEach($build in $buildsToStop)
+                {
+                  $urlToCancel = "$(System.TeamFoundationCollectionUri)$(System.TeamProject)/_apis/build/builds/$($build.id)?api-version=$(devOpsApiVersion)"
+                  $body = @{ status = "cancelling" } | ConvertTo-Json
+                  Write-Host "PATCH $urlToCancel"
+                  Invoke-RestMethod -Uri $urlToCancel -Method Patch -Header $header -ContentType application/json -Body $body
+                }
+            condition: eq(variables.cancelPriorDeployments, 'true')
+  - stage: BuildProject
+    displayName: Deploy NetSuite
+    jobs:
+      - job: BuildRelease
+        steps:
+          - template: azure-pipelines-build.yml
