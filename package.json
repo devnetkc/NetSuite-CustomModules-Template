@@ -1,6 +1,6 @@
 {
   "name": "netsuite-custommodules-template",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "NS Template project for testing and using CI/CD for your NetSuite SuiteCloud projects.",
   "scripts": {
     "test": "jest --coverage --ci --testResultsProcessor=\"./node_modules/jest-junit-reporter\" --testPathPattern=$npm_config_testpattern --$npm_config_watch ",
@@ -57,7 +57,7 @@
     "@types/jsdom": "^20.0.1",
     "@vnetwork-solutions/ns-custom-stubs-template": "^2.0.1",
     "alias-quokka-plugin": "^0.1.0",
-    "clean-jsdoc-theme": "^4.1.10",
+    "clean-jsdoc-theme": "^4.2.14",
     "contributor-table": "^1.0.0",
     "jest": "^29.3.1",
     "jest-environment-jsdom": "^29.3.1",
