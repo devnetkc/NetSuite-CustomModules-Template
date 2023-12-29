@@ -1,6 +1,6 @@
 {
   "name": "netsuite-custommodules-template",
-  "version": "1.1.0",
+  "version": "1.1.2",
   "description": "NS Template project for testing and using CI/CD for your NetSuite SuiteCloud projects.",
   "scripts": {
     "test": "jest --coverage --ci --testResultsProcessor=\"./node_modules/jest-junit-reporter\" --testPathPattern=$npm_config_testpattern --$npm_config_watch ",
@@ -20,7 +20,7 @@
     "save-token": "node ./node_modules/@oracle/suitecloud-cli/src/suitecloud.js account:savetoken --account $npm_config_account --authid $npm_config_authid --tokenid $npm_config_tokenid --tokensecret $npm_config_tokensecret",
     "deploy-pipeline": "npm run deploy",
     "add-ns-dependents": "npm run suitecloud -- project:adddependencies && bash .ci/scripts/rmDependents.sh",
-    "generate-jsDocs": "jsdoc -c .ci/config/jsDocsConf.json && cp .ci/templates/web.config.private docs/private/web.config && cp -f docs/private/styles/clean-jsdoc-theme.min.css docs/assets/templates/clean-jsdoc-theme.min.css && cp -f .ci/templates/web.config.search.private ./docs/private/data/web.config",
+    "generate-jsDocs": "jsdoc -c .ci/config/jsDocsConf.json -p && cp .ci/templates/web.config.private docs/private/web.config && cp -f docs/private/styles/clean-jsdoc-theme.min.css docs/assets/templates/clean-jsdoc-theme.min.css && cp -f .ci/templates/web.config.search.private ./docs/private/data/web.config",
     "generate-mdDocs": "npm run generate-jsDocs && jsdoc2md --template .ci/templates/README.hbs ./src/**/*[^.min].js > README.md",
     "generate-wiki": "mkdir -p wiki && node .ci/config/docsMD.config.min.js && mv wiki/README.md wiki/HOME.md",
     "docs": "npm run clean && npm run generate-jsDocs && npm run generate-mdDocs && npm run generate-wiki",
@@ -57,7 +57,7 @@
     "@types/jsdom": "^20.0.1",
     "@vnetwork-solutions/ns-custom-stubs-template": "^2.0.1",
     "alias-quokka-plugin": "^0.1.0",
-    "clean-jsdoc-theme": "^4.1.10",
+    "clean-jsdoc-theme": "^4.2.14",
     "contributor-table": "^1.0.0",
     "jest": "^29.3.1",
     "jest-environment-jsdom": "^29.3.1",
