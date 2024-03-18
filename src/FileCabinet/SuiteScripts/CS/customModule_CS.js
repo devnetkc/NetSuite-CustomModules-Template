@@ -21,7 +21,7 @@
   const Dependencies = [
     'N/log',
     '/SuiteScripts/Modules/aModule.min',
-    '/SuiteScripts/Modules/bModule.min' /* Note we are loading the minified dependency here */,
+    '/SuiteScripts/Modules/aModule.min' /* Note we are loading the minified dependency here */,
   ];
   //AMD & CommonJS compatibility stuff
   // CommonJS
